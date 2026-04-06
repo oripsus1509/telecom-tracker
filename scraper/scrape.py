@@ -907,11 +907,10 @@ def main() -> None:
         append_to_changelog(all_changes, dry_run=args.dry_run)
 
     # Create GitHub Issue (GitHub emails you automatically)
-    # Always notify when: changes found, force-notify flag, or scrape errors
-    should_notify = bool(all_changes) or args.force_notify or bool(scrape_errors)
-    if should_notify:
-        title, body = build_issue(all_changes, scrape_errors)
-        create_github_issue(title, body, dry_run=args.dry_run)
+    # Always create — daily "all clear" issues are also useful as a confirmation
+    # that the monitor is running correctly.
+    title, body = build_issue(all_changes, scrape_errors)
+    create_github_issue(title, body, dry_run=args.dry_run)
 
     # Summary
     log.info(
