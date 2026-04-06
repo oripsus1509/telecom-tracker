@@ -1,0 +1,427 @@
+{
+  "meta": {
+    "last_updated": "2026-04-02",
+    "collected_date_display": "Apr 2, 2026",
+    "region": "São Paulo, SP",
+    "ddd": "11"
+  },
+  "history": [
+    {
+      "date": "2026-04-02",
+      "prepaid": {
+        "vivo":  { "price": 30.00, "plan_gb": 10 },
+        "tim":   { "price": 30.00, "plan_gb": 12 },
+        "claro": { "price": 30.00, "plan_gb": 12 }
+      },
+      "controle": {
+        "vivo":  { "price": 59.00, "plan_gb": 21 },
+        "tim":   { "price": null,  "plan_gb": 15 },
+        "claro": { "price": 59.90, "plan_gb": null }
+      },
+      "postpaid": {
+        "vivo":  { "price": 140.00, "plan_gb": 50 },
+        "tim":   { "price": 159.99, "plan_gb": 15 },
+        "claro": { "price": 119.90, "plan_gb": 25 }
+      }
+    }
+  ],
+  "segments": {
+    "prepaid": {
+      "label": "Pre-Paid Plans — 30 Days",
+      "sublabel": "Cheapest 30-day package per carrier · São Paulo, SP",
+      "info": "Plans listed are the <strong>cheapest entry-level 30-day option</strong> for São Paulo. Portability and flash promotions may vary. Always confirm on the carrier's website before purchasing.",
+      "plans": [
+        {
+          "carrier": "vivo",
+          "plan_name": "Vivo Turbo 10 GB",
+          "price": 30.00,
+          "price_display": "30",
+          "price_period": "per 30 days",
+          "price_pending": false,
+          "currency": "R$",
+          "scrape_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/pre-pago/vivo-pre",
+          "scrape_status": "blocked",
+          "gb": {
+            "plan_gb": 10,
+            "total_displayed": 10,
+            "total_label": "plan data",
+            "bar": [
+              { "type": "plan",   "pct": 62 },
+              { "type": "bonus",  "pct": 6  },
+              { "type": "stream", "pct": 32 }
+            ],
+            "legend": [
+              { "type": "plan",   "amount": "10 GB", "label": "plan" },
+              { "type": "bonus",  "amount": "+1 GB", "label": "monthly bonus*" },
+              { "type": "stream", "amount": "+5 GB", "label": "YouTube (free)" }
+            ],
+            "note": "* +1 GB bonus unlocked by accumulating R$35+ in recharges/month. YouTube GB does not count against plan quota."
+          },
+          "features": [
+            { "label": "Unlimited domestic calls",          "value": "✓ Yes",               "status": "yes" },
+            { "label": "WhatsApp free (no data deduction)", "value": "✓ Yes",               "status": "yes" },
+            { "label": "Streaming included",                "value": "Partial — see below", "status": "partial" },
+            { "label": "International roaming",             "value": "✗ No",                "status": "no" }
+          ],
+          "extras": [
+            { "icon_class": "ei-stream", "icon": "📚", "text": "Skeelo · GoRead · Hube Jornais · Babbel" },
+            { "icon_class": "ei-stream", "icon": "🤖", "text": "1 year Perplexity Pro" },
+            { "icon_class": "ei-promo",  "icon": "🎬", "text": "50% Cinemark discount (monthly)" },
+            { "icon_class": "ei-reward", "icon": "💰", "text": "Vale Bônus R$50/month" }
+          ],
+          "source_url":   "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/pre-pago/vivo-pre",
+          "source_label": "vivo.com.br",
+          "verified": true,
+          "verified_label": "Verified"
+        },
+        {
+          "carrier": "tim",
+          "plan_name": "TIM Pré XIP Plus",
+          "price": 30.00,
+          "price_display": "30",
+          "price_period": "per 30 days",
+          "price_pending": false,
+          "currency": "R$",
+          "scrape_url": "https://www.tim.com.br/sp/para-voce/planos/pre-pago",
+          "scrape_status": "ok",
+          "gb": {
+            "plan_gb": 12,
+            "total_displayed": 16,
+            "total_label": "total (12 plan + 4 social)",
+            "bar": [
+              { "type": "plan",   "pct": 75 },
+              { "type": "social", "pct": 25 }
+            ],
+            "legend": [
+              { "type": "plan",   "amount": "12 GB", "label": "plan" },
+              { "type": "social", "amount": "+4 GB", "label": "social (Facebook, Instagram, X)" }
+            ],
+            "note": "* 4 GB social package available on recharges ≥ R$30. Social GB does not count against plan quota."
+          },
+          "features": [
+            { "label": "Unlimited domestic calls",          "value": "✓ Yes (via *41)",      "status": "yes" },
+            { "label": "WhatsApp free (no data deduction)", "value": "✓ Yes — voice & video", "status": "yes" },
+            { "label": "Streaming included",                "value": "✓ Prime Video mobile", "status": "yes" },
+            { "label": "International roaming",             "value": "✗ No",                 "status": "no"  }
+          ],
+          "extras": [
+            { "icon_class": "ei-reward", "icon": "💳", "text": "Pix cashback: R$3 on recharges ≥ R$30" },
+            { "icon_class": "ei-promo",  "icon": "🛒", "text": "R$15 Zé Delivery voucher (min. R$70 order)" },
+            { "icon_class": "ei-promo",  "icon": "🏥", "text": "Cartão de Todos: 3 months free (health/pharmacy)" },
+            { "icon_class": "ei-reward", "icon": "🎁", "text": "Prize draw: R$10,000 gift card (\"Recarga Premiada\")" }
+          ],
+          "source_url":   "https://www.tim.com.br/sp/para-voce/planos/pre-pago",
+          "source_label": "tim.com.br",
+          "verified": true,
+          "verified_label": "Verified"
+        },
+        {
+          "carrier": "claro",
+          "plan_name": "Claro Prezão",
+          "price": 30.00,
+          "price_display": "30",
+          "price_period": "per 30 days",
+          "price_pending": false,
+          "currency": "R$",
+          "scrape_url": "https://www.claro.com.br/celular/planos-pre/prezao",
+          "scrape_status": "ok",
+          "gb": {
+            "plan_gb": 12,
+            "total_displayed": 12,
+            "total_label": "plan data",
+            "bar": [
+              { "type": "plan",  "pct": 55 },
+              { "type": "bonus", "pct": 45 }
+            ],
+            "legend": [
+              { "type": "plan",  "amount": "12 GB",  "label": "plan" },
+              { "type": "bonus", "amount": "+10 GB", "label": "1st digital recharge bonus (7 days)*" }
+            ],
+            "note": "* 10 GB bonus valid 7 days, only on 1st recharge ≥ R$20 via app/website. Subsequent recharges: +1–3 GB (7 days each)."
+          },
+          "features": [
+            { "label": "Unlimited domestic calls",          "value": "✓ Yes",               "status": "yes" },
+            { "label": "WhatsApp free (no data deduction)", "value": "✓ Yes — voice & video","status": "yes" },
+            { "label": "Streaming included",                "value": "✗ No",                "status": "no"  },
+            { "label": "International roaming",             "value": "✗ No",                "status": "no"  }
+          ],
+          "extras": [
+            { "icon_class": "ei-promo", "icon": "📲", "text": "Activate monthly plan: SMS \"MES\" to 2006" }
+          ],
+          "source_url":   "https://www.claro.com.br/celular/planos-pre/prezao",
+          "source_label": "claro.com.br",
+          "verified": true,
+          "verified_label": "Verified"
+        }
+      ]
+    },
+    "controle": {
+      "label": "Controle Plans — Entry Level",
+      "sublabel": "Cheapest controle plan per carrier · DDD 11, São Paulo",
+      "info": "Controle plans have a fixed monthly bill with no mandatory loyalty period. Portability bonus (+5 GB / 12 months) and extras via automatic debit or digital invoice can increase total data significantly.",
+      "plans": [
+        {
+          "carrier": "vivo",
+          "plan_name": "Vivo Controle 21 GB",
+          "price": 59.00,
+          "price_display": "59",
+          "price_period": "per month",
+          "price_pending": false,
+          "currency": "R$",
+          "scrape_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-controle",
+          "scrape_status": "blocked",
+          "gb": {
+            "plan_gb": 21,
+            "total_displayed": 32,
+            "total_label": "potential total",
+            "bar": [
+              { "type": "plan",  "pct": 66 },
+              { "type": "bonus", "pct": 18 },
+              { "type": "port",  "pct": 16 }
+            ],
+            "legend": [
+              { "type": "plan",  "amount": "21 GB", "label": "plan" },
+              { "type": "bonus", "amount": "+3 GB", "label": "digital invoice · +3 GB auto debit" },
+              { "type": "port",  "amount": "+5 GB", "label": "portability (12 mo.)" }
+            ],
+            "note": "* Digital invoice & auto debit bonuses are ongoing while criteria are met. Portability bonus valid for 12 months for customers switching carriers."
+          },
+          "features": [
+            { "label": "Unlimited domestic calls",       "value": "✓ Yes",                "status": "yes" },
+            { "label": "WhatsApp / Waze / Moovit free",  "value": "✓ Yes",                "status": "yes" },
+            { "label": "Streaming included",             "value": "3 mo. Amazon Prime",   "status": "partial" },
+            { "label": "International roaming",          "value": "✗ No",                 "status": "no"  },
+            { "label": "No loyalty contract",            "value": "✓ Yes",                "status": "yes" }
+          ],
+          "extras": [
+            { "icon_class": "ei-promo",  "icon": "🎬", "text": "50% Cinemark discount (monthly)" },
+            { "icon_class": "ei-reward", "icon": "🏪", "text": "Vivo Valoriza — discounts at 3,000+ venues" },
+            { "icon_class": "ei-reward", "icon": "💰", "text": "Vale Bônus up to R$100/month" },
+            { "icon_class": "ei-stream", "icon": "📱", "text": "Optional social pack +R$5/mo (YouTube, TikTok, Instagram, Facebook, X, Tinder, Pinterest — 2× data)" }
+          ],
+          "source_url":   "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-controle",
+          "source_label": "vivo.com.br",
+          "verified": true,
+          "verified_label": "Verified"
+        },
+        {
+          "carrier": "tim",
+          "plan_name": "TIM Controle",
+          "price": null,
+          "price_display": null,
+          "price_period": "DDD 11",
+          "price_pending": true,
+          "currency": "R$",
+          "scrape_url": "https://www.tim.com.br/rj/para-voce/planos/controle",
+          "scrape_status": "blocked",
+          "gb": {
+            "plan_gb": 15,
+            "total_displayed": 31,
+            "total_label": "total included",
+            "bar": [
+              { "type": "plan",  "pct": 48 },
+              { "type": "bonus", "pct": 33 },
+              { "type": "port",  "pct": 19 }
+            ],
+            "legend": [
+              { "type": "plan",  "amount": "15 GB",  "label": "plan" },
+              { "type": "bonus", "amount": "+10 GB", "label": "promo bonus" },
+              { "type": "port",  "amount": "+6 GB",  "label": "special bonus" }
+            ],
+            "note": "* Price for DDD 11 not retrieved (website blocked). GB data compiled from third-party sources. Please verify at tim.com.br."
+          },
+          "features": [
+            { "label": "Unlimited domestic calls",          "value": "✓ Yes",  "status": "yes" },
+            { "label": "WhatsApp free (no data deduction)", "value": "✓ Yes",  "status": "yes" },
+            { "label": "Streaming included",                "value": "✗ No",   "status": "no"  },
+            { "label": "International roaming",             "value": "✗ No",   "status": "no"  },
+            { "label": "No loyalty contract",               "value": "✓ Yes",  "status": "yes" }
+          ],
+          "extras": [
+            { "icon_class": "ei-reward", "icon": "⭐", "text": "TIM Mais rewards program access" },
+            { "icon_class": "ei-stream", "icon": "📡", "text": "National roaming included" }
+          ],
+          "source_url":   "https://www.tim.com.br/rj/para-voce/planos/controle",
+          "source_label": "tim.com.br",
+          "verified": false,
+          "verified_label": "Price pending"
+        },
+        {
+          "carrier": "claro",
+          "plan_name": "Claro Controle",
+          "price": 59.90,
+          "price_display": "59,90",
+          "price_period": "per month",
+          "price_pending": false,
+          "currency": "R$",
+          "scrape_url": "https://www.claro.com.br/celular/controle",
+          "scrape_status": "ok",
+          "gb": {
+            "plan_gb": null,
+            "total_displayed": 10,
+            "total_label": "bonus included",
+            "bar": [
+              { "type": "bonus", "pct": 100 }
+            ],
+            "legend": [
+              { "type": "bonus", "amount": "+10 GB", "label": "bonus (base GB not disclosed)" }
+            ],
+            "note": "* Base plan GB not published on official page at time of collection. 10 GB bonus confirmed. Verify full details at claro.com.br."
+          },
+          "features": [
+            { "label": "Unlimited domestic calls",              "value": "✓ Yes",  "status": "yes" },
+            { "label": "WhatsApp / Waze / Claro Música free",   "value": "✓ Yes",  "status": "yes" },
+            { "label": "Social apps free (FB, Instagram, X)",   "value": "✓ Yes",  "status": "yes" },
+            { "label": "Streaming included",                    "value": "✗ No",   "status": "no"  },
+            { "label": "No loyalty contract",                   "value": "✓ Yes",  "status": "yes" }
+          ],
+          "extras": [
+            { "icon_class": "ei-reward", "icon": "💲", "text": "Fixed monthly bill — cancel anytime" }
+          ],
+          "source_url":   "https://www.claro.com.br/celular/controle",
+          "source_label": "claro.com.br",
+          "verified": true,
+          "verified_label": "Verified"
+        }
+      ]
+    },
+    "postpaid": {
+      "label": "Post-Paid Plans — Entry Level Individual",
+      "sublabel": "Cheapest individual post-paid plan per carrier",
+      "info": "Entry-level post-paid plans typically include streaming of the customer's choice. Portability bonuses and super-bonuses can significantly expand data allowances.",
+      "plans": [
+        {
+          "carrier": "vivo",
+          "plan_name": "Vivo Pós — Entry",
+          "price": 140.00,
+          "price_display": "140",
+          "price_period": "per month",
+          "price_pending": false,
+          "currency": "R$",
+          "scrape_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-pos-pago",
+          "scrape_status": "blocked",
+          "gb": {
+            "plan_gb": 50,
+            "total_displayed": 56,
+            "total_label": "base total (up to 132 GB w/ portab.)",
+            "bar": [
+              { "type": "plan",  "pct": 70 },
+              { "type": "bonus", "pct": 11 },
+              { "type": "port",  "pct": 19 }
+            ],
+            "legend": [
+              { "type": "plan",  "amount": "50 GB",  "label": "plan" },
+              { "type": "bonus", "amount": "+3 GB",  "label": "digital inv. · +3 GB auto debit" },
+              { "type": "port",  "amount": "+76 GB", "label": "portability bonus*" }
+            ],
+            "note": "* Portability super-bonus: up to 76 GB for switchers. Digital invoice & auto debit bonuses are ongoing. Total base: 56 GB; with portability: up to 132 GB."
+          },
+          "features": [
+            { "label": "Unlimited domestic calls", "value": "✓ Yes",                   "status": "yes" },
+            { "label": "Streaming included",       "value": "✓ Yes — choice of 1",     "status": "yes" },
+            { "label": "International roaming",    "value": "✓ Vivo Travel Americas",   "status": "yes" },
+            { "label": "No loyalty contract",      "value": "✓ Yes",                   "status": "yes" }
+          ],
+          "extras": [
+            { "icon_class": "ei-stream", "icon": "🎬", "text": "<strong>Streaming choice:</strong> Netflix · Disney+ · Amazon Prime · Globoplay · Spotify · Premiere" },
+            { "icon_class": "ei-travel", "icon": "✈️", "text": "Vivo Travel Americas — internet + SMS + calls" },
+            { "icon_class": "ei-promo",  "icon": "🎬", "text": "50% Cinemark discount (monthly)" },
+            { "icon_class": "ei-reward", "icon": "💰", "text": "Vale Bônus up to R$100/month" }
+          ],
+          "source_url":   "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-pos-pago",
+          "source_label": "vivo.com.br",
+          "verified": true,
+          "verified_label": "Verified"
+        },
+        {
+          "carrier": "tim",
+          "plan_name": "TIM Black A",
+          "price": 159.99,
+          "price_display": "159,99",
+          "price_period": "per month",
+          "price_pending": false,
+          "currency": "R$",
+          "scrape_url": "https://www.tim.com.br/rj/para-voce/planos/pos-pago/tim-black",
+          "scrape_status": "ok",
+          "gb": {
+            "plan_gb": 15,
+            "total_displayed": 40,
+            "total_label": "total (up to 70 GB w/ super-bonus)",
+            "bar": [
+              { "type": "plan",   "pct": 37 },
+              { "type": "bonus",  "pct": 25 },
+              { "type": "port",   "pct": 25 },
+              { "type": "social", "pct": 13 }
+            ],
+            "legend": [
+              { "type": "plan",   "amount": "15 GB",  "label": "plan" },
+              { "type": "bonus",  "amount": "+10 GB", "label": "promo · +10 GB special" },
+              { "type": "social", "amount": "+5 GB",  "label": "social (WhatsApp, Instagram, FB, X)" }
+            ],
+            "note": "* Super-bonus available on select variants, up to 70 GB total. Social GB does not count against main quota."
+          },
+          "features": [
+            { "label": "Unlimited domestic calls",               "value": "✓ Yes (via 041)",    "status": "yes" },
+            { "label": "Social apps free (WhatsApp, IG, FB, X)", "value": "✓ Yes",              "status": "yes" },
+            { "label": "Streaming included",                     "value": "✓ Monthly choice",   "status": "yes" },
+            { "label": "International roaming",                  "value": "✓ Americas 25 GB",   "status": "yes" },
+            { "label": "No loyalty contract",                    "value": "✓ Yes",              "status": "yes" }
+          ],
+          "extras": [
+            { "icon_class": "ei-stream", "icon": "🎬", "text": "<strong>Monthly streaming choice:</strong> Max · YouTube Premium · Disney+ · Amazon Prime" },
+            { "icon_class": "ei-stream", "icon": "🎵", "text": "Deezer Premium included" },
+            { "icon_class": "ei-promo",  "icon": "📱", "text": "Exclusive smartphone discounts (TIM Tech Store)" },
+            { "icon_class": "ei-travel", "icon": "✈️", "text": "Americas roaming: up to 25 GB" }
+          ],
+          "source_url":   "https://www.tim.com.br/rj/para-voce/planos/pos-pago/tim-black",
+          "source_label": "tim.com.br",
+          "verified": true,
+          "verified_label": "Verified"
+        },
+        {
+          "carrier": "claro",
+          "plan_name": "Claro Pós 70 GB",
+          "price": 119.90,
+          "price_display": "119,90",
+          "price_period": "per month",
+          "price_pending": false,
+          "currency": "R$",
+          "scrape_url": "https://www.claro.com.br/celular/pos",
+          "scrape_status": "ok",
+          "gb": {
+            "plan_gb": 25,
+            "total_displayed": 70,
+            "total_label": "total included",
+            "bar": [
+              { "type": "plan",   "pct": 36 },
+              { "type": "social", "pct": 35 },
+              { "type": "bonus",  "pct": 29 }
+            ],
+            "legend": [
+              { "type": "plan",   "amount": "25 GB",  "label": "plan (general)" },
+              { "type": "social", "amount": "+25 GB", "label": "social & video streaming" },
+              { "type": "bonus",  "amount": "+20 GB", "label": "bonus" }
+            ],
+            "note": "* Social/video GB includes WhatsApp, Instagram, Facebook, Twitter, Waze, and video streaming apps."
+          },
+          "features": [
+            { "label": "Unlimited domestic calls",               "value": "✓ Yes",              "status": "yes" },
+            { "label": "Social apps free (WhatsApp, IG, FB, X)", "value": "✓ Yes",              "status": "yes" },
+            { "label": "Streaming included",                     "value": "Netflix + CONMEBOL", "status": "partial" },
+            { "label": "International roaming",                  "value": "✓ Passaporte Américas","status": "yes" },
+            { "label": "No loyalty contract",                    "value": "✓ Yes",              "status": "yes" }
+          ],
+          "extras": [
+            { "icon_class": "ei-reward", "icon": "👥", "text": "1 dependent line included" },
+            { "icon_class": "ei-stream", "icon": "📚", "text": "Skeelo Premium · Claro Banca Premium · TrueCaller" },
+            { "icon_class": "ei-travel", "icon": "✈️", "text": "Passaporte Americas included" }
+          ],
+          "source_url":   "https://www.claro.com.br/celular/pos",
+          "source_label": "claro.com.br",
+          "verified": true,
+          "verified_label": "Verified"
+        }
+      ]
+    }
+  }
+}

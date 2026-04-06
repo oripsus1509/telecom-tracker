@@ -1,0 +1,91 @@
+name: Telecom Price Monitor
+
+on:
+  # Daily at 09:00 BRT = 12:00 UTC (Brazil has no DST since 2019, fixed UTC-3)
+  schedule:
+    - cron: "0 12 * * *"
+
+  # Manual trigger from the GitHub Actions UI or via GitHub CLI:
+  #   gh workflow run monitor.yml
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (scrape only, no issue created, no file writes)"
+        required: false
+        default: "false"
+        type: choice
+        options: ["false", "true"]
+      force_notify:
+        description: "Force create GitHub Issue even if nothing changed (test)"
+        required: false
+        default: "false"
+        type: choice
+        options: ["false", "true"]
+
+# Allow the workflow to push changes back to the repository
+permissions:
+  contents: write   # to commit plans.json + changelog.xlsx
+  issues: write     # to create alert issues (GitHub emails you automatically)
+
+jobs:
+  monitor:
+    name: Scrape & Diff
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # ── 1. Checkout ────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # ── 2. Python ──────────────────────────────────────────────────
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Install Python dependencies
+        run: pip install -r scraper/requirements.txt
+
+      # ── 3. Playwright ──────────────────────────────────────────────
+      - name: Install Playwright browsers
+        run: python -m playwright install chromium --with-deps
+
+      # ── 4. Run scraper ─────────────────────────────────────────────
+      - name: Run scraper
+        env:
+          # GITHUB_TOKEN is provided automatically by Actions — no setup needed
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO:  ${{ github.repository }}
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          if [ "${{ github.event.inputs.force_notify }}" = "true" ]; then
+            ARGS="$ARGS --force-notify"
+          fi
+          python scraper/scrape.py $ARGS
+
+      # ── 5. Commit changes (only if plans.json or changelog.xlsx changed) ──
+      - name: Commit updated data files
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage only the data files managed by the scraper
+          git add data/plans.json data/changelog.xlsx 2>/dev/null || true
+
+          # Only commit if something actually changed
+          if git diff --staged --quiet; then
+            echo "No data changes — nothing to commit."
+          else
+            git commit -m "data: daily plan snapshot [$(date -u +%Y-%m-%d)]"
+            git push
+            echo "Changes committed and pushed."
+          fi

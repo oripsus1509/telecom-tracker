@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing Monitor — BTG Pactual TMT</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #f0f2f5;
+      --surface:     #ffffff;
+      --border:      #dde1e8;
+      --border-lt:   #eef0f4;
+      --text:        #0d1117;
+      --text-muted:  #5a6272;
+      --text-light:  #9aa3b0;
+      --navy:        #0d1f3c;
+      --navy2:       #162844;
+      --accent:      #1a56db;
+      --accent-bg:   #ebf2ff;
+      --vivo:        #6e28c2;
+      --vivo-bg:     #f2eaff;
+      --tim:         #003087;
+      --tim-bg:      #e6ecf7;
+      --claro:       #cc0a19;
+      --claro-bg:    #fde8ea;
+      --yes-bg:      #ecfdf5;
+      --yes-text:    #065f46;
+      --no-bg:       #fef2f2;
+      --no-text:     #991b1b;
+      --pending-bg:  #fffbeb;
+      --pending-text:#92400e;
+      --green:       #059669;
+      --red:         #dc2626;
+      --s1:          #1a56db;   /* plan GB  */
+      --s2:          #7c3aed;   /* bonus    */
+      --s3:          #059669;   /* portab   */
+      --s4:          #d97706;   /* social   */
+      --s5:          #db2777;   /* streaming*/
+      --radius:      10px;
+      --shadow:      0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+      --shadow-md:   0 4px 12px rgba(0,0,0,.08);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* ══ TOP BAR ═══════════════════════════════════════════════════ */
+    .topbar {
+      background: #060f1e;
+      color: #5e7a9e;
+      font-size: 11px;
+      padding: 5px 0;
+    }
+    .w { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+    .topbar .w { display: flex; justify-content: space-between; align-items: center; }
+    .topbar a { color: #4a6fa5; text-decoration: none; margin-left: 14px; }
+    .topbar a:hover { color: #9ab3cc; }
+
+    /* ══ HEADER ═════════════════════════════════════════════════════ */
+    header {
+      background: var(--navy);
+      position: sticky; top: 0; z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .header-row {
+      display: flex; align-items: center;
+      height: 48px; gap: 0;
+    }
+    .logo {
+      font-size: 16px; font-weight: 800; letter-spacing: -.4px;
+      color: #fff; white-space: nowrap; margin-right: 28px;
+    }
+    .logo em { color: #4a8fd4; font-style: normal; }
+    .main-nav { display: flex; height: 48px; }
+    .main-nav a {
+      color: #7a9dc8; text-decoration: none;
+      font-size: 12px; font-weight: 500;
+      padding: 0 14px; height: 48px;
+      display: flex; align-items: center;
+      border-bottom: 2px solid transparent;
+      transition: color .12s, border-color .12s;
+      white-space: nowrap;
+    }
+    .main-nav a:hover { color: #c5d8ef; }
+    .main-nav a.active { color: #fff; border-bottom-color: #4a8fd4; }
+    .header-right {
+      margin-left: auto;
+      font-size: 11px; color: #4a6575;
+      white-space: nowrap;
+    }
+
+    /* ══ SUB-NAV (segment tabs) ══════════════════════════════════════ */
+    .subnav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 48px; z-index: 190;
+      box-shadow: var(--shadow);
+    }
+    .subnav .w { display: flex; }
+    .sub-tab {
+      padding: 11px 18px;
+      font-size: 12px; font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all .12s;
+      white-space: nowrap;
+    }
+    .sub-tab:hover { color: var(--text); }
+    .sub-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+    .sub-tab .pill {
+      display: inline-block;
+      background: var(--accent-bg); color: var(--accent);
+      font-size: 10px; font-weight: 600;
+      padding: 1px 6px; border-radius: 10px; margin-left: 5px;
+    }
+
+    /* ══ PAGE INTRO ═════════════════════════════════════════════════ */
+    .page-intro {
+      background: linear-gradient(135deg, #0d1f3c 0%, #15325c 100%);
+      color: #fff;
+      padding: 24px 0 20px;
+      border-bottom: 1px solid #1a3561;
+    }
+    .page-intro h1 { font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
+    .page-intro p  { font-size: 12px; color: #6e90bb; margin-top: 4px; }
+    .breadcrumb    { font-size: 11px; color: #3e5f8a; margin-bottom: 8px; }
+    .breadcrumb span { color: #5a80a8; }
+
+    /* ══ MAIN ════════════════════════════════════════════════════════ */
+    main { max-width: 1280px; margin: 0 auto; padding: 24px 20px 64px; }
+
+    /* ══ PANEL ════════════════════════════════════════════════════════ */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ══ SECTION HEAD ════════════════════════════════════════════════ */
+    .sh {
+      display: flex; align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 18px;
+    }
+    .sh h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--navy); }
+    .sh p  { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+    .collected-badge {
+      font-size: 11px; color: var(--text-light);
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 3px 9px; border-radius: 5px; white-space: nowrap;
+    }
+    .collected-badge b { color: var(--green); }
+
+    /* ══ INFO BAR ════════════════════════════════════════════════════ */
+    .info-bar {
+      background: var(--accent-bg); border: 1px solid #c7d9f8;
+      border-radius: 7px; padding: 9px 14px;
+      font-size: 11.5px; color: #1e40af;
+      display: flex; gap: 8px; align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .info-bar-icon { flex-shrink: 0; margin-top: 1px; }
+
+    /* ══ PLANS GRID ══════════════════════════════════════════════════ */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    @media(max-width:900px){ .plans-grid { grid-template-columns:1fr; } }
+
+    /* ══ PLAN CARD ═══════════════════════════════════════════════════ */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: box-shadow .14s, transform .14s;
+    }
+    .card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+
+    /* card top stripe */
+    .card-stripe { height: 3px; }
+    .stripe-vivo  { background: var(--vivo);  }
+    .stripe-tim   { background: var(--tim);   }
+    .stripe-claro { background: var(--claro); }
+
+    /* card header */
+    .card-head {
+      padding: 14px 16px 12px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--border-lt);
+    }
+    .carrier-badge {
+      width: 32px; height: 32px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; flex-shrink: 0;
+    }
+    .cb-vivo  { background: var(--vivo-bg);  color: var(--vivo);  }
+    .cb-tim   { background: var(--tim-bg);   color: var(--tim);   }
+    .cb-claro { background: var(--claro-bg); color: var(--claro); }
+    .card-head-info { flex: 1; min-width: 0; }
+    .carrier-name { font-size: 13px; font-weight: 700; }
+    .plan-name    { font-size: 11px; color: var(--text-muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .price-block  { text-align: right; flex-shrink: 0; }
+    .price-main   { font-size: 22px; font-weight: 800; line-height: 1; letter-spacing: -.6px; }
+    .price-curr   { font-size: 12px; font-weight: 600; vertical-align: top; margin-top: 3px; display: inline-block; }
+    .price-period { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .price-nd     { font-size: 12px; color: var(--pending-text); font-weight: 600; padding-top: 5px; }
+
+    /* ── DATA SECTION ─────────────────────────────────────────────── */
+    .card-data {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-lt);
+    }
+    .data-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 8px; }
+    .data-big { font-size: 30px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+    .data-unit{ font-size: 13px; font-weight: 600; color: var(--text-muted); }
+    .data-sub { font-size: 11px; color: var(--text-muted); }
+
+    .gb-bar {
+      display: flex; height: 5px; border-radius: 3px;
+      overflow: hidden; gap: 2px; margin-bottom: 7px;
+    }
+    .gb-seg { border-radius: 2px; }
+    .s-plan     { background: var(--s1); }
+    .s-bonus    { background: var(--s2); }
+    .s-port     { background: var(--s3); }
+    .s-social   { background: var(--s4); }
+    .s-stream   { background: var(--s5); }
+
+    .gb-legend { display: flex; flex-wrap: wrap; gap: 5px 10px; }
+    .gbl-item  { display: flex; align-items: center; gap: 4px; font-size: 10.5px; color: var(--text-muted); }
+    .gbl-dot   { width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; }
+    .gbl-item strong { color: var(--text); font-weight: 600; }
+    .gb-note { font-size: 10px; color: var(--text-light); font-style: italic; margin-top: 6px; line-height: 1.4; }
+
+    /* ── FEATURE ROWS ─────────────────────────────────────────────── */
+    .card-features {
+      border-bottom: 1px solid var(--border-lt);
+    }
+    .feat-row {
+      display: flex; align-items: center;
+      padding: 7px 16px;
+      border-bottom: 1px solid var(--border-lt);
+      gap: 10px;
+    }
+    .feat-row:last-child { border-bottom: none; }
+    .feat-label { flex: 1; font-size: 11.5px; color: var(--text-muted); }
+    .feat-val {
+      font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 4px;
+      white-space: nowrap;
+    }
+    .fv-yes     { background: var(--yes-bg);     color: var(--yes-text);     }
+    .fv-no      { background: var(--no-bg);      color: var(--no-text);      }
+    .fv-partial { background: var(--pending-bg); color: var(--pending-text); }
+    .fv-info    { background: var(--accent-bg);  color: var(--accent);       }
+
+    /* ── EXTRAS ───────────────────────────────────────────────────── */
+    .card-extras { padding: 10px 16px; flex: 1; }
+    .extras-title {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .6px;
+      color: var(--text-light); margin-bottom: 7px;
+    }
+    .extra-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .extra-item {
+      display: flex; align-items: flex-start; gap: 6px;
+      font-size: 11.5px; color: var(--text); line-height: 1.4;
+    }
+    .extra-icon {
+      flex-shrink: 0; width: 15px; height: 15px;
+      border-radius: 3px; display: flex; align-items: center;
+      justify-content: center; font-size: 8px; margin-top: 1px;
+    }
+    .ei-stream { background: #ede9fe; color: #5b21b6; }
+    .ei-promo  { background: #fef3c7; color: #92400e; }
+    .ei-travel { background: #fce7f3; color: #9d174d; }
+    .ei-reward { background: #d1fae5; color: #065f46; }
+
+    /* ── CARD FOOTER ──────────────────────────────────────────────── */
+    .card-foot {
+      padding: 8px 16px 12px;
+      background: #fafbfc;
+      border-top: 1px solid var(--border-lt);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .src-link { font-size: 10px; color: var(--accent); text-decoration: none; }
+    .src-link:hover { text-decoration: underline; }
+    .verified { font-size: 10px; color: var(--text-light); display: flex; align-items: center; gap: 3px; }
+    .vdot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+    .vdot-warn { background: #f59e0b; }
+
+    /* ══ COMPARISON TABLE ════════════════════════════════════════════ */
+    .cmp-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .cmp-head {
+      padding: 11px 16px;
+      background: #f6f8fa; border-bottom: 1px solid var(--border);
+      font-size: 12px; font-weight: 700; color: var(--navy);
+    }
+    .cmp-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+    .cmp-table th {
+      text-align: left; padding: 8px 14px;
+      background: #f6f8fa; color: var(--text-muted);
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cmp-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid #f0f2f5;
+      color: var(--text); vertical-align: middle;
+    }
+    .cmp-table tr:last-child td { border-bottom: none; }
+    .cmp-table tr:hover td { background: #fafbfd; }
+    .c-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 7px 2px 4px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+    }
+    .cp-vivo  { background: var(--vivo-bg);  color: var(--vivo);  }
+    .cp-tim   { background: var(--tim-bg);   color: var(--tim);   }
+    .cp-claro { background: var(--claro-bg); color: var(--claro); }
+    .cpdot { width: 5px; height: 5px; border-radius: 50%; }
+    .cpdot-vivo  { background: var(--vivo);  }
+    .cpdot-tim   { background: var(--tim);   }
+    .cpdot-claro { background: var(--claro); }
+    .price-bold { font-weight: 700; font-size: 12.5px; }
+    .tag {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      padding: 1px 6px; border-radius: 4px; margin: 1px;
+    }
+    .tg-plan   { background: #dbeafe; color: #1d4ed8; }
+    .tg-bonus  { background: #ede9fe; color: #5b21b6; }
+    .tg-port   { background: #d1fae5; color: #065f46; }
+    .tg-social { background: #fef3c7; color: #92400e; }
+    .row-best td { background: #f0fdf4 !important; }
+
+    /* ══ HISTORY / CHARTS ════════════════════════════════════════════ */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media(max-width:800px){ .chart-grid { grid-template-columns: 1fr; } }
+    .chart-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 18px 14px;
+      box-shadow: var(--shadow);
+    }
+    .chart-card-full {
+      grid-column: 1 / -1;
+    }
+    .chart-title {
+      font-size: 12px; font-weight: 700; color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .chart-subtitle {
+      font-size: 11px; color: var(--text-muted); margin-bottom: 14px;
+    }
+    .chart-wrap { position: relative; height: 220px; }
+    .chart-wrap-lg { position: relative; height: 260px; }
+
+    .no-data-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: rgba(248,250,252,.92);
+      border-radius: 6px;
+      gap: 6px;
+      z-index: 10;
+    }
+    .no-data-overlay .nd-icon { font-size: 28px; opacity: .35; }
+    .no-data-overlay .nd-title { font-size: 12px; font-weight: 700; color: var(--navy); }
+    .no-data-overlay .nd-sub   { font-size: 11px; color: var(--text-muted); text-align: center; max-width: 220px; }
+
+    .legend-row {
+      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px;
+    }
+    .leg-item { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: var(--text-muted); }
+    .leg-line { width: 18px; height: 3px; border-radius: 2px; }
+
+    /* history segment selector */
+    .hist-controls {
+      display: flex; gap: 8px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;
+    }
+    .hist-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+    .seg-btn {
+      padding: 5px 13px; font-size: 11.5px; font-weight: 500;
+      border: 1px solid var(--border); border-radius: 5px;
+      background: var(--surface); color: var(--text-muted);
+      cursor: pointer; transition: all .12s;
+    }
+    .seg-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .seg-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    .suggestions-box {
+      background: #fffbeb; border: 1px solid #fcd34d;
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 24px;
+    }
+    .suggestions-box h3 { font-size: 12px; font-weight: 700; color: #78350f; margin-bottom: 10px; }
+    .sug-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    @media(max-width:700px){ .sug-grid { grid-template-columns: 1fr; } }
+    .sug-card {
+      background: var(--surface); border: 1px solid #fde68a;
+      border-radius: 6px; padding: 10px 12px;
+    }
+    .sug-card h4 { font-size: 11.5px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .sug-card p  { font-size: 10.5px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ══ FOOTER ══════════════════════════════════════════════════════ */
+    footer {
+      background: #0a1525; color: #3e5570;
+      font-size: 11px; padding: 16px 0; margin-top: 40px;
+    }
+    footer .w { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    footer a { color: #3e6090; text-decoration: none; }
+
+    /* carrier color helpers */
+    .cv { color: var(--vivo); }
+    .ct { color: var(--tim);  }
+    .cc { color: var(--claro);}
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="w">
+    <span>BTG Pactual Equity Research — TMT</span>
+    <div><a href="#">Reports</a><a href="#">Coverage</a><a href="#">Contact</a></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="w header-row">
+    <div class="logo">btg<em>pactual</em></div>
+    <nav class="main-nav">
+      <a href="#">Global AIM</a>
+      <a href="#" class="active">Telecom</a>
+      <a href="#">Buyback &amp; Insider Tracker</a>
+    </nav>
+    <div class="header-right">Source: Carriers &nbsp;·&nbsp; Updated Apr 2, 2026</div>
+  </div>
+</header>
+
+<!-- SUB-NAV -->
+<div class="subnav">
+  <div class="w">
+    <div class="sub-tab active" onclick="switchTab('prepaid',this)">Pre-Paid <span class="pill">30d · SP</span></div>
+    <div class="sub-tab" onclick="switchTab('controle',this)">Controle <span class="pill">DDD 11</span></div>
+    <div class="sub-tab" onclick="switchTab('postpaid',this)">Post-Paid <span class="pill">Individual</span></div>
+    <div class="sub-tab" onclick="switchTab('history',this)">History &amp; Charts</div>
+  </div>
+</div>
+
+<!-- PAGE INTRO -->
+<div class="page-intro">
+  <div class="w">
+    <div class="breadcrumb">Telecom <span>›</span> Pricing Monitor</div>
+    <h1>Mobile Pricing Monitor — Brazil</h1>
+    <p>Entry-level plan pricing and benefits across Vivo, TIM and Claro. Data collected directly from official carrier websites.</p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+<!-- ════════════════ PRE-PAID ══════════════════════════════════════ -->
+<div id="panel-prepaid" class="panel active">
+
+  <div class="sh">
+    <div>
+      <h2>Pre-Paid Plans — 30 Days</h2>
+      <p>Cheapest 30-day package per carrier · São Paulo, SP</p>
+    </div>
+    <div class="collected-badge">Collected <b>Apr 2, 2026</b></div>
+  </div>
+
+  <div class="info-bar">
+    <span class="info-bar-icon">ℹ</span>
+    <span>Plans listed are the <strong>cheapest entry-level 30-day option</strong> for São Paulo. Portability and flash promotions may vary. Always confirm on the carrier's website before purchasing.</span>
+  </div>
+
+  <div class="plans-grid">
+
+    <!-- ── VIVO ── -->
+    <div class="card">
+      <div class="card-stripe stripe-vivo"></div>
+      <div class="card-head">
+        <div class="carrier-badge cb-vivo">Vi</div>
+        <div class="card-head-info">
+          <div class="carrier-name cv">Vivo</div>
+          <div class="plan-name">Vivo Turbo 10 GB</div>
+        </div>
+        <div class="price-block">
+          <div class="price-main"><span class="price-curr">R$</span>30</div>
+          <div class="price-period">per 30 days</div>
+        </div>
+      </div>
+
+      <div class="card-data">
+        <div class="data-row">
+          <div class="data-big cv">10</div>
+          <div class="data-unit">GB</div>
+          <div class="data-sub">plan data</div>
+        </div>
+        <div class="gb-bar">
+          <div class="gb-seg s-plan" style="width:62%"></div>
+          <div class="gb-seg s-bonus" style="width:6%"></div>
+          <div class="gb-seg s-stream" style="width:32%"></div>
+        </div>
+        <div class="gb-legend">
+          <div class="gbl-item"><div class="gbl-dot s-plan"></div><strong>10 GB</strong>&nbsp;plan</div>
+          <div class="gbl-item"><div class="gbl-dot s-bonus"></div><strong>+1 GB</strong>&nbsp;monthly bonus*</div>
+          <div class="gbl-item"><div class="gbl-dot s-stream"></div><strong>+5 GB</strong>&nbsp;YouTube (free)</div>
+        </div>
+        <div class="gb-note">* +1 GB bonus unlocked by accumulating R$35+ in recharges/month. YouTube GB does not count against plan quota.</div>
+      </div>
+
+      <div class="card-features">
+        <div class="feat-row">
+          <span class="feat-label">Unlimited domestic calls</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">WhatsApp free (no data deduction)</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Streaming included</span>
+          <span class="feat-val fv-partial">Partial — see below</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">International roaming</span>
+          <span class="feat-val fv-no">✗ No</span>
+        </div>
+      </div>
+
+      <div class="card-extras">
+        <div class="extras-title">Additional benefits</div>
+        <ul class="extra-list">
+          <li class="extra-item"><span class="extra-icon ei-stream">📚</span>Skeelo · GoRead · Hube Jornais · Babbel</li>
+          <li class="extra-item"><span class="extra-icon ei-stream">🤖</span>1 year Perplexity Pro</li>
+          <li class="extra-item"><span class="extra-icon ei-promo">🎬</span>50% Cinemark discount (monthly)</li>
+          <li class="extra-item"><span class="extra-icon ei-reward">💰</span>Vale Bônus R$50/month</li>
+        </ul>
+      </div>
+
+      <div class="card-foot">
+        <a href="https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/pre-pago/vivo-pre" class="src-link" target="_blank">↗ vivo.com.br</a>
+        <div class="verified"><div class="vdot"></div>Verified</div>
+      </div>
+    </div>
+
+    <!-- ── TIM ── -->
+    <div class="card">
+      <div class="card-stripe stripe-tim"></div>
+      <div class="card-head">
+        <div class="carrier-badge cb-tim">Ti</div>
+        <div class="card-head-info">
+          <div class="carrier-name ct">TIM</div>
+          <div class="plan-name">TIM Pré XIP Plus</div>
+        </div>
+        <div class="price-block">
+          <div class="price-main"><span class="price-curr">R$</span>30</div>
+          <div class="price-period">per 30 days</div>
+        </div>
+      </div>
+
+      <div class="card-data">
+        <div class="data-row">
+          <div class="data-big ct">16</div>
+          <div class="data-unit">GB</div>
+          <div class="data-sub">total (12 plan + 4 social)</div>
+        </div>
+        <div class="gb-bar">
+          <div class="gb-seg s-plan" style="width:75%"></div>
+          <div class="gb-seg s-social" style="width:25%"></div>
+        </div>
+        <div class="gb-legend">
+          <div class="gbl-item"><div class="gbl-dot s-plan"></div><strong>12 GB</strong>&nbsp;plan</div>
+          <div class="gbl-item"><div class="gbl-dot s-social"></div><strong>+4 GB</strong>&nbsp;social (Facebook, Instagram, X)</div>
+        </div>
+        <div class="gb-note">* 4 GB social package available on recharges ≥ R$30. Social GB does not count against plan quota.</div>
+      </div>
+
+      <div class="card-features">
+        <div class="feat-row">
+          <span class="feat-label">Unlimited domestic calls</span>
+          <span class="feat-val fv-yes">✓ Yes (via *41)</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">WhatsApp free (no data deduction)</span>
+          <span class="feat-val fv-yes">✓ Yes — voice &amp; video</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Streaming included</span>
+          <span class="feat-val fv-yes">✓ Prime Video mobile</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">International roaming</span>
+          <span class="feat-val fv-no">✗ No</span>
+        </div>
+      </div>
+
+      <div class="card-extras">
+        <div class="extras-title">Additional benefits</div>
+        <ul class="extra-list">
+          <li class="extra-item"><span class="extra-icon ei-reward">💳</span>Pix cashback: R$3 on recharges ≥ R$30</li>
+          <li class="extra-item"><span class="extra-icon ei-promo">🛒</span>R$15 Zé Delivery voucher (min. R$70 order)</li>
+          <li class="extra-item"><span class="extra-icon ei-promo">🏥</span>Cartão de Todos: 3 months free (health/pharmacy)</li>
+          <li class="extra-item"><span class="extra-icon ei-reward">🎁</span>Prize draw: R$10,000 gift card ("Recarga Premiada")</li>
+        </ul>
+      </div>
+
+      <div class="card-foot">
+        <a href="https://www.tim.com.br/sp/para-voce/planos/pre-pago" class="src-link" target="_blank">↗ tim.com.br</a>
+        <div class="verified"><div class="vdot"></div>Verified</div>
+      </div>
+    </div>
+
+    <!-- ── CLARO ── -->
+    <div class="card">
+      <div class="card-stripe stripe-claro"></div>
+      <div class="card-head">
+        <div class="carrier-badge cb-claro">Cl</div>
+        <div class="card-head-info">
+          <div class="carrier-name cc">Claro</div>
+          <div class="plan-name">Claro Prezão</div>
+        </div>
+        <div class="price-block">
+          <div class="price-main"><span class="price-curr">R$</span>30</div>
+          <div class="price-period">per 30 days</div>
+        </div>
+      </div>
+
+      <div class="card-data">
+        <div class="data-row">
+          <div class="data-big cc">12</div>
+          <div class="data-unit">GB</div>
+          <div class="data-sub">plan data</div>
+        </div>
+        <div class="gb-bar">
+          <div class="gb-seg s-plan" style="width:55%"></div>
+          <div class="gb-seg s-bonus" style="width:45%"></div>
+        </div>
+        <div class="gb-legend">
+          <div class="gbl-item"><div class="gbl-dot s-plan"></div><strong>12 GB</strong>&nbsp;plan</div>
+          <div class="gbl-item"><div class="gbl-dot s-bonus"></div><strong>+10 GB</strong>&nbsp;1st digital recharge bonus (7 days)*</div>
+        </div>
+        <div class="gb-note">* 10 GB bonus valid 7 days, only on 1st recharge ≥ R$20 via app/website. Subsequent recharges: +1–3 GB (7 days each).</div>
+      </div>
+
+      <div class="card-features">
+        <div class="feat-row">
+          <span class="feat-label">Unlimited domestic calls</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">WhatsApp free (no data deduction)</span>
+          <span class="feat-val fv-yes">✓ Yes — voice &amp; video</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Streaming included</span>
+          <span class="feat-val fv-no">✗ No</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">International roaming</span>
+          <span class="feat-val fv-no">✗ No</span>
+        </div>
+      </div>
+
+      <div class="card-extras">
+        <div class="extras-title">Additional benefits</div>
+        <ul class="extra-list">
+          <li class="extra-item"><span class="extra-icon ei-promo">📲</span>Activate monthly plan: SMS "MES" to 2006</li>
+        </ul>
+      </div>
+
+      <div class="card-foot">
+        <a href="https://www.claro.com.br/celular/planos-pre/prezao" class="src-link" target="_blank">↗ claro.com.br</a>
+        <div class="verified"><div class="vdot"></div>Verified</div>
+      </div>
+    </div>
+
+  </div><!-- /grid pre-paid -->
+
+  <!-- COMPARISON TABLE -->
+  <div class="cmp-box">
+    <div class="cmp-head">Summary Comparison — Pre-Paid 30 Days · São Paulo</div>
+    <table class="cmp-table">
+      <thead><tr>
+        <th>Carrier</th><th>Plan</th><th>Price / 30d</th>
+        <th>Plan GB</th><th>Bonus / Social GB</th>
+        <th>Streaming</th><th>Calls</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="c-pill cp-vivo"><span class="cpdot cpdot-vivo"></span>Vivo</span></td>
+          <td>Vivo Turbo</td><td class="price-bold">R$ 30</td>
+          <td><span class="tag tg-plan">10 GB</span></td>
+          <td><span class="tag tg-bonus">+1 GB bonus</span> <span class="tag tg-social">+5 GB YouTube</span></td>
+          <td>Perplexity Pro (1yr)</td><td>✓</td>
+        </tr>
+        <tr>
+          <td><span class="c-pill cp-tim"><span class="cpdot cpdot-tim"></span>TIM</span></td>
+          <td>Pré XIP Plus</td><td class="price-bold">R$ 30</td>
+          <td><span class="tag tg-plan">12 GB</span></td>
+          <td><span class="tag tg-social">+4 GB social</span></td>
+          <td>Prime Video (mobile)</td><td>✓ (*41)</td>
+        </tr>
+        <tr>
+          <td><span class="c-pill cp-claro"><span class="cpdot cpdot-claro"></span>Claro</span></td>
+          <td>Prezão</td><td class="price-bold">R$ 30</td>
+          <td><span class="tag tg-plan">12 GB</span></td>
+          <td><span class="tag tg-bonus">+10 GB 1st digital (7d)</span></td>
+          <td>—</td><td>✓</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /panel pre-paid -->
+
+
+<!-- ════════════════ CONTROLE ════════════════════════════════════ -->
+<div id="panel-controle" class="panel">
+
+  <div class="sh">
+    <div>
+      <h2>Controle Plans — Entry Level</h2>
+      <p>Cheapest controle plan per carrier · DDD 11, São Paulo</p>
+    </div>
+    <div class="collected-badge">Collected <b>Apr 2, 2026</b></div>
+  </div>
+
+  <div class="info-bar">
+    <span class="info-bar-icon">ℹ</span>
+    <span>Controle plans have a fixed monthly bill with no mandatory loyalty period. Portability bonus (+5 GB / 12 months) and extras via automatic debit or digital invoice can increase total data significantly.</span>
+  </div>
+
+  <div class="plans-grid">
+
+    <!-- ── VIVO ── -->
+    <div class="card">
+      <div class="card-stripe stripe-vivo"></div>
+      <div class="card-head">
+        <div class="carrier-badge cb-vivo">Vi</div>
+        <div class="card-head-info">
+          <div class="carrier-name cv">Vivo</div>
+          <div class="plan-name">Vivo Controle 21 GB</div>
+        </div>
+        <div class="price-block">
+          <div class="price-main"><span class="price-curr">R$</span>59</div>
+          <div class="price-period">per month</div>
+        </div>
+      </div>
+
+      <div class="card-data">
+        <div class="data-row">
+          <div class="data-big cv">32</div>
+          <div class="data-unit">GB</div>
+          <div class="data-sub">potential total</div>
+        </div>
+        <div class="gb-bar">
+          <div class="gb-seg s-plan"  style="width:66%"></div>
+          <div class="gb-seg s-bonus" style="width:18%"></div>
+          <div class="gb-seg s-port"  style="width:16%"></div>
+        </div>
+        <div class="gb-legend">
+          <div class="gbl-item"><div class="gbl-dot s-plan"></div><strong>21 GB</strong>&nbsp;plan</div>
+          <div class="gbl-item"><div class="gbl-dot s-bonus"></div><strong>+3 GB</strong>&nbsp;digital invoice &nbsp;·&nbsp; <strong>+3 GB</strong>&nbsp;auto debit</div>
+          <div class="gbl-item"><div class="gbl-dot s-port"></div><strong>+5 GB</strong>&nbsp;portability (12 mo.)</div>
+        </div>
+        <div class="gb-note">* Digital invoice &amp; auto debit bonuses are ongoing while criteria are met. Portability bonus valid for 12 months for customers switching carriers.</div>
+      </div>
+
+      <div class="card-features">
+        <div class="feat-row">
+          <span class="feat-label">Unlimited domestic calls</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">WhatsApp / Waze / Moovit free</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Streaming included</span>
+          <span class="feat-val fv-partial">3 mo. Amazon Prime</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">International roaming</span>
+          <span class="feat-val fv-no">✗ No</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">No loyalty contract</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+      </div>
+
+      <div class="card-extras">
+        <div class="extras-title">Additional benefits</div>
+        <ul class="extra-list">
+          <li class="extra-item"><span class="extra-icon ei-promo">🎬</span>50% Cinemark discount (monthly)</li>
+          <li class="extra-item"><span class="extra-icon ei-reward">🏪</span>Vivo Valoriza — discounts at 3,000+ venues</li>
+          <li class="extra-item"><span class="extra-icon ei-reward">💰</span>Vale Bônus up to R$100/month</li>
+          <li class="extra-item"><span class="extra-icon ei-stream">📱</span>Optional social pack +R$5/mo (YouTube, TikTok, Instagram, Facebook, X, Tinder, Pinterest — 2× data)</li>
+        </ul>
+      </div>
+
+      <div class="card-foot">
+        <a href="https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-controle" class="src-link" target="_blank">↗ vivo.com.br</a>
+        <div class="verified"><div class="vdot"></div>Verified</div>
+      </div>
+    </div>
+
+    <!-- ── TIM ── -->
+    <div class="card">
+      <div class="card-stripe stripe-tim"></div>
+      <div class="card-head">
+        <div class="carrier-badge cb-tim">Ti</div>
+        <div class="card-head-info">
+          <div class="carrier-name ct">TIM</div>
+          <div class="plan-name">TIM Controle</div>
+        </div>
+        <div class="price-block">
+          <div class="price-nd">Price TBC</div>
+          <div class="price-period">DDD 11</div>
+        </div>
+      </div>
+
+      <div class="card-data">
+        <div class="data-row">
+          <div class="data-big ct">31</div>
+          <div class="data-unit">GB</div>
+          <div class="data-sub">total included</div>
+        </div>
+        <div class="gb-bar">
+          <div class="gb-seg s-plan"  style="width:48%"></div>
+          <div class="gb-seg s-bonus" style="width:33%"></div>
+          <div class="gb-seg s-port"  style="width:19%"></div>
+        </div>
+        <div class="gb-legend">
+          <div class="gbl-item"><div class="gbl-dot s-plan"></div><strong>15 GB</strong>&nbsp;plan</div>
+          <div class="gbl-item"><div class="gbl-dot s-bonus"></div><strong>+10 GB</strong>&nbsp;promo bonus</div>
+          <div class="gbl-item"><div class="gbl-dot s-port"></div><strong>+6 GB</strong>&nbsp;special bonus</div>
+        </div>
+        <div class="gb-note">* Price for DDD 11 not retrieved (website blocked). GB data compiled from third-party sources. Please verify at tim.com.br.</div>
+      </div>
+
+      <div class="card-features">
+        <div class="feat-row">
+          <span class="feat-label">Unlimited domestic calls</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">WhatsApp free (no data deduction)</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Streaming included</span>
+          <span class="feat-val fv-no">✗ No</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">International roaming</span>
+          <span class="feat-val fv-no">✗ No</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">No loyalty contract</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+      </div>
+
+      <div class="card-extras">
+        <div class="extras-title">Additional benefits</div>
+        <ul class="extra-list">
+          <li class="extra-item"><span class="extra-icon ei-reward">⭐</span>TIM Mais rewards program access</li>
+          <li class="extra-item"><span class="extra-icon ei-stream">📡</span>National roaming included</li>
+        </ul>
+      </div>
+
+      <div class="card-foot">
+        <a href="https://www.tim.com.br/rj/para-voce/planos/controle" class="src-link" target="_blank">↗ tim.com.br</a>
+        <div class="verified"><div class="vdot vdot-warn"></div>Price pending</div>
+      </div>
+    </div>
+
+    <!-- ── CLARO ── -->
+    <div class="card">
+      <div class="card-stripe stripe-claro"></div>
+      <div class="card-head">
+        <div class="carrier-badge cb-claro">Cl</div>
+        <div class="card-head-info">
+          <div class="carrier-name cc">Claro</div>
+          <div class="plan-name">Claro Controle</div>
+        </div>
+        <div class="price-block">
+          <div class="price-main"><span class="price-curr">R$</span>59<span style="font-size:12px;font-weight:600">,90</span></div>
+          <div class="price-period">per month</div>
+        </div>
+      </div>
+
+      <div class="card-data">
+        <div class="data-row">
+          <div class="data-big cc">10</div>
+          <div class="data-unit">GB</div>
+          <div class="data-sub">bonus included</div>
+        </div>
+        <div class="gb-bar">
+          <div class="gb-seg s-bonus" style="width:100%"></div>
+        </div>
+        <div class="gb-legend">
+          <div class="gbl-item"><div class="gbl-dot s-bonus"></div><strong>+10 GB</strong>&nbsp;bonus (base GB not disclosed)</div>
+        </div>
+        <div class="gb-note">* Base plan GB not published on official page at time of collection. 10 GB bonus confirmed. Verify full details at claro.com.br.</div>
+      </div>
+
+      <div class="card-features">
+        <div class="feat-row">
+          <span class="feat-label">Unlimited domestic calls</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">WhatsApp / Waze / Claro Música free</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Social apps free (FB, Instagram, X)</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Streaming included</span>
+          <span class="feat-val fv-no">✗ No</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">No loyalty contract</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+      </div>
+
+      <div class="card-extras">
+        <div class="extras-title">Additional benefits</div>
+        <ul class="extra-list">
+          <li class="extra-item"><span class="extra-icon ei-reward">💲</span>Fixed monthly bill — cancel anytime</li>
+        </ul>
+      </div>
+
+      <div class="card-foot">
+        <a href="https://www.claro.com.br/celular/controle" class="src-link" target="_blank">↗ claro.com.br</a>
+        <div class="verified"><div class="vdot"></div>Verified</div>
+      </div>
+    </div>
+
+  </div><!-- /grid controle -->
+
+  <div class="cmp-box">
+    <div class="cmp-head">Summary Comparison — Controle · DDD 11 · São Paulo</div>
+    <table class="cmp-table">
+      <thead><tr>
+        <th>Carrier</th><th>Plan</th><th>Price/mo</th>
+        <th>Plan GB</th><th>Bonus GB</th><th>Portability</th><th>Free Apps</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-best">
+          <td><span class="c-pill cp-vivo"><span class="cpdot cpdot-vivo"></span>Vivo</span></td>
+          <td>Controle 21 GB</td><td class="price-bold">R$ 59,00</td>
+          <td><span class="tag tg-plan">21 GB</span></td>
+          <td><span class="tag tg-bonus">+3 GB digital inv.</span><span class="tag tg-bonus">+3 GB auto debit</span></td>
+          <td><span class="tag tg-port">+5 GB (12 mo.)</span></td>
+          <td>WhatsApp, Waze, Moovit</td>
+        </tr>
+        <tr>
+          <td><span class="c-pill cp-tim"><span class="cpdot cpdot-tim"></span>TIM</span></td>
+          <td>TIM Controle</td><td class="price-bold" style="color:var(--pending-text)">TBC</td>
+          <td><span class="tag tg-plan">15 GB</span></td>
+          <td><span class="tag tg-bonus">+10 GB promo</span><span class="tag tg-bonus">+6 GB special</span></td>
+          <td>—</td>
+          <td>WhatsApp</td>
+        </tr>
+        <tr>
+          <td><span class="c-pill cp-claro"><span class="cpdot cpdot-claro"></span>Claro</span></td>
+          <td>Claro Controle</td><td class="price-bold">R$ 59,90</td>
+          <td><span class="tag tg-plan">N/D</span></td>
+          <td><span class="tag tg-bonus">+10 GB</span></td>
+          <td>—</td>
+          <td>WhatsApp, Waze, FB, Instagram, X, Claro Música</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /panel controle -->
+
+
+<!-- ════════════════ POST-PAID ═══════════════════════════════════ -->
+<div id="panel-postpaid" class="panel">
+
+  <div class="sh">
+    <div>
+      <h2>Post-Paid Plans — Entry Level Individual</h2>
+      <p>Cheapest individual post-paid plan per carrier</p>
+    </div>
+    <div class="collected-badge">Collected <b>Apr 2, 2026</b></div>
+  </div>
+
+  <div class="info-bar">
+    <span class="info-bar-icon">ℹ</span>
+    <span>Entry-level post-paid plans typically include streaming of the customer's choice. Portability bonuses and super-bonuses can significantly expand data allowances.</span>
+  </div>
+
+  <div class="plans-grid">
+
+    <!-- ── VIVO ── -->
+    <div class="card">
+      <div class="card-stripe stripe-vivo"></div>
+      <div class="card-head">
+        <div class="carrier-badge cb-vivo">Vi</div>
+        <div class="card-head-info">
+          <div class="carrier-name cv">Vivo</div>
+          <div class="plan-name">Vivo Pós — Entry</div>
+        </div>
+        <div class="price-block">
+          <div class="price-main"><span class="price-curr">R$</span>140</div>
+          <div class="price-period">per month</div>
+        </div>
+      </div>
+
+      <div class="card-data">
+        <div class="data-row">
+          <div class="data-big cv">56</div>
+          <div class="data-unit">GB</div>
+          <div class="data-sub">base total (up to 132 GB w/ portab.)</div>
+        </div>
+        <div class="gb-bar">
+          <div class="gb-seg s-plan"  style="width:70%"></div>
+          <div class="gb-seg s-bonus" style="width:11%"></div>
+          <div class="gb-seg s-port"  style="width:19%"></div>
+        </div>
+        <div class="gb-legend">
+          <div class="gbl-item"><div class="gbl-dot s-plan"></div><strong>50 GB</strong>&nbsp;plan</div>
+          <div class="gbl-item"><div class="gbl-dot s-bonus"></div><strong>+3 GB</strong>&nbsp;digital inv. &nbsp;·&nbsp; <strong>+3 GB</strong>&nbsp;auto debit</div>
+          <div class="gbl-item"><div class="gbl-dot s-port"></div><strong>+76 GB</strong>&nbsp;portability bonus*</div>
+        </div>
+        <div class="gb-note">* Portability super-bonus: up to 76 GB for switchers. Digital invoice &amp; auto debit bonuses are ongoing. Total base: 56 GB; with portability: up to 132 GB.</div>
+      </div>
+
+      <div class="card-features">
+        <div class="feat-row">
+          <span class="feat-label">Unlimited domestic calls</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Streaming included</span>
+          <span class="feat-val fv-yes">✓ Yes — choice of 1</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">International roaming</span>
+          <span class="feat-val fv-yes">✓ Vivo Travel Americas</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">No loyalty contract</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+      </div>
+
+      <div class="card-extras">
+        <div class="extras-title">Additional benefits</div>
+        <ul class="extra-list">
+          <li class="extra-item"><span class="extra-icon ei-stream">🎬</span><strong>Streaming choice:</strong> Netflix · Disney+ · Amazon Prime · Globoplay · Spotify · Premiere</li>
+          <li class="extra-item"><span class="extra-icon ei-travel">✈️</span>Vivo Travel Americas — internet + SMS + calls</li>
+          <li class="extra-item"><span class="extra-icon ei-promo">🎬</span>50% Cinemark discount (monthly)</li>
+          <li class="extra-item"><span class="extra-icon ei-reward">💰</span>Vale Bônus up to R$100/month</li>
+        </ul>
+      </div>
+
+      <div class="card-foot">
+        <a href="https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-pos-pago" class="src-link" target="_blank">↗ vivo.com.br</a>
+        <div class="verified"><div class="vdot"></div>Verified</div>
+      </div>
+    </div>
+
+    <!-- ── TIM ── -->
+    <div class="card">
+      <div class="card-stripe stripe-tim"></div>
+      <div class="card-head">
+        <div class="carrier-badge cb-tim">Ti</div>
+        <div class="card-head-info">
+          <div class="carrier-name ct">TIM</div>
+          <div class="plan-name">TIM Black A</div>
+        </div>
+        <div class="price-block">
+          <div class="price-main"><span class="price-curr">R$</span>159<span style="font-size:11px;font-weight:600">,99</span></div>
+          <div class="price-period">per month</div>
+        </div>
+      </div>
+
+      <div class="card-data">
+        <div class="data-row">
+          <div class="data-big ct">40</div>
+          <div class="data-unit">GB</div>
+          <div class="data-sub">total (up to 70 GB w/ super-bonus)</div>
+        </div>
+        <div class="gb-bar">
+          <div class="gb-seg s-plan"   style="width:37%"></div>
+          <div class="gb-seg s-bonus"  style="width:25%"></div>
+          <div class="gb-seg s-port"   style="width:25%"></div>
+          <div class="gb-seg s-social" style="width:13%"></div>
+        </div>
+        <div class="gb-legend">
+          <div class="gbl-item"><div class="gbl-dot s-plan"></div><strong>15 GB</strong>&nbsp;plan</div>
+          <div class="gbl-item"><div class="gbl-dot s-bonus"></div><strong>+10 GB</strong>&nbsp;promo &nbsp;·&nbsp; <strong>+10 GB</strong>&nbsp;special</div>
+          <div class="gbl-item"><div class="gbl-dot s-social"></div><strong>+5 GB</strong>&nbsp;social (WhatsApp, Instagram, FB, X)</div>
+        </div>
+        <div class="gb-note">* Super-bonus available on select variants, up to 70 GB total. Social GB does not count against main quota.</div>
+      </div>
+
+      <div class="card-features">
+        <div class="feat-row">
+          <span class="feat-label">Unlimited domestic calls</span>
+          <span class="feat-val fv-yes">✓ Yes (via 041)</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Social apps free (WhatsApp, IG, FB, X)</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Streaming included</span>
+          <span class="feat-val fv-yes">✓ Monthly choice</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">International roaming</span>
+          <span class="feat-val fv-yes">✓ Americas 25 GB</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">No loyalty contract</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+      </div>
+
+      <div class="card-extras">
+        <div class="extras-title">Additional benefits</div>
+        <ul class="extra-list">
+          <li class="extra-item"><span class="extra-icon ei-stream">🎬</span><strong>Monthly streaming choice:</strong> Max · YouTube Premium · Disney+ · Amazon Prime</li>
+          <li class="extra-item"><span class="extra-icon ei-stream">🎵</span>Deezer Premium included</li>
+          <li class="extra-item"><span class="extra-icon ei-promo">📱</span>Exclusive smartphone discounts (TIM Tech Store)</li>
+          <li class="extra-item"><span class="extra-icon ei-travel">✈️</span>Americas roaming: up to 25 GB</li>
+        </ul>
+      </div>
+
+      <div class="card-foot">
+        <a href="https://www.tim.com.br/rj/para-voce/planos/pos-pago/tim-black" class="src-link" target="_blank">↗ tim.com.br</a>
+        <div class="verified"><div class="vdot"></div>Verified</div>
+      </div>
+    </div>
+
+    <!-- ── CLARO ── -->
+    <div class="card">
+      <div class="card-stripe stripe-claro"></div>
+      <div class="card-head">
+        <div class="carrier-badge cb-claro">Cl</div>
+        <div class="card-head-info">
+          <div class="carrier-name cc">Claro</div>
+          <div class="plan-name">Claro Pós 70 GB</div>
+        </div>
+        <div class="price-block">
+          <div class="price-main"><span class="price-curr">R$</span>119<span style="font-size:11px;font-weight:600">,90</span></div>
+          <div class="price-period">per month</div>
+        </div>
+      </div>
+
+      <div class="card-data">
+        <div class="data-row">
+          <div class="data-big cc">70</div>
+          <div class="data-unit">GB</div>
+          <div class="data-sub">total included</div>
+        </div>
+        <div class="gb-bar">
+          <div class="gb-seg s-plan"   style="width:36%"></div>
+          <div class="gb-seg s-social" style="width:35%"></div>
+          <div class="gb-seg s-bonus"  style="width:29%"></div>
+        </div>
+        <div class="gb-legend">
+          <div class="gbl-item"><div class="gbl-dot s-plan"></div><strong>25 GB</strong>&nbsp;plan (general)</div>
+          <div class="gbl-item"><div class="gbl-dot s-social"></div><strong>+25 GB</strong>&nbsp;social &amp; video streaming</div>
+          <div class="gbl-item"><div class="gbl-dot s-bonus"></div><strong>+20 GB</strong>&nbsp;bonus</div>
+        </div>
+        <div class="gb-note">* Social/video GB includes WhatsApp, Instagram, Facebook, Twitter, Waze, and video streaming apps.</div>
+      </div>
+
+      <div class="card-features">
+        <div class="feat-row">
+          <span class="feat-label">Unlimited domestic calls</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Social apps free (WhatsApp, IG, FB, X, Waze)</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">Streaming included</span>
+          <span class="feat-val fv-partial">Netflix &amp; CONMEBOL TV (extra data)</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">International roaming</span>
+          <span class="feat-val fv-yes">✓ Passaporte Americas</span>
+        </div>
+        <div class="feat-row">
+          <span class="feat-label">No loyalty contract</span>
+          <span class="feat-val fv-yes">✓ Yes</span>
+        </div>
+      </div>
+
+      <div class="card-extras">
+        <div class="extras-title">Additional benefits</div>
+        <ul class="extra-list">
+          <li class="extra-item"><span class="extra-icon ei-reward">👥</span>1 dependent line included</li>
+          <li class="extra-item"><span class="extra-icon ei-stream">📚</span>Skeelo Premium · Claro Banca Premium · TrueCaller</li>
+          <li class="extra-item"><span class="extra-icon ei-travel">✈️</span>Passaporte Americas included</li>
+        </ul>
+      </div>
+
+      <div class="card-foot">
+        <a href="https://www.claro.com.br/celular/pos" class="src-link" target="_blank">↗ claro.com.br</a>
+        <div class="verified"><div class="vdot"></div>Verified</div>
+      </div>
+    </div>
+
+  </div><!-- /grid post-paid -->
+
+  <div class="cmp-box">
+    <div class="cmp-head">Summary Comparison — Post-Paid Individual · Entry Level</div>
+    <table class="cmp-table">
+      <thead><tr>
+        <th>Carrier</th><th>Plan</th><th>Price/mo</th>
+        <th>Plan GB</th><th>Bonus / Social</th>
+        <th>Streaming</th><th>International</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="c-pill cp-vivo"><span class="cpdot cpdot-vivo"></span>Vivo</span></td>
+          <td>Vivo Pós Entry</td><td class="price-bold">R$ 140,00</td>
+          <td><span class="tag tg-plan">50 GB</span></td>
+          <td><span class="tag tg-bonus">+6 GB inv/debit</span><span class="tag tg-port">+76 GB portab.</span></td>
+          <td>Choice: Netflix / Disney+ / Prime / Spotify / Globoplay</td>
+          <td>Vivo Travel Americas</td>
+        </tr>
+        <tr>
+          <td><span class="c-pill cp-tim"><span class="cpdot cpdot-tim"></span>TIM</span></td>
+          <td>TIM Black A</td><td class="price-bold">R$ 159,99</td>
+          <td><span class="tag tg-plan">15 GB</span></td>
+          <td><span class="tag tg-bonus">+20 GB promo</span><span class="tag tg-social">+5 GB social</span></td>
+          <td>Monthly choice: Max / YouTube Premium / Disney+ / Prime</td>
+          <td>Americas roaming 25 GB</td>
+        </tr>
+        <tr class="row-best">
+          <td><span class="c-pill cp-claro"><span class="cpdot cpdot-claro"></span>Claro</span></td>
+          <td>Claro Pós 70 GB</td><td class="price-bold">R$ 119,90</td>
+          <td><span class="tag tg-plan">25 GB</span></td>
+          <td><span class="tag tg-social">+25 GB social/video</span><span class="tag tg-bonus">+20 GB bonus</span></td>
+          <td>Netflix + CONMEBOL TV (extra data)</td>
+          <td>Passaporte Americas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /panel post-paid -->
+
+
+<!-- ════════════════ HISTORY & CHARTS ════════════════════════════ -->
+<div id="panel-history" class="panel">
+
+  <div class="sh">
+    <div>
+      <h2>History &amp; Charts</h2>
+      <p>Price evolution, R$/GB efficiency and plan composition over time</p>
+    </div>
+    <div class="collected-badge">First data point <b>Apr 2, 2026</b></div>
+  </div>
+
+  <!-- Suggestions -->
+  <div class="suggestions-box">
+    <h3>📊 Planned Visualizations — pending historical data collection</h3>
+    <div class="sug-grid">
+      <div class="sug-card">
+        <h4>R$/GB Efficiency</h4>
+        <p>Line chart showing price-per-GB (plan base only) per carrier over time. Tracks how value has evolved across segments.</p>
+      </div>
+      <div class="sug-card">
+        <h4>Monthly Price (R$)</h4>
+        <p>Price trend per segment (Pre-Paid, Controle, Post-Paid). Immediate readout when a carrier reprices a plan.</p>
+      </div>
+      <div class="sug-card">
+        <h4>Total GB Included</h4>
+        <p>Plan GB + all permanent bonuses per carrier over time — shows how data allowances have grown without price increases.</p>
+      </div>
+      <div class="sug-card">
+        <h4>Streaming Bundle Value</h4>
+        <p>Estimated retail value of streaming services bundled per plan. Useful for adjusting the effective price comparison.</p>
+      </div>
+      <div class="sug-card">
+        <h4>Price Heatmap (YoY)</h4>
+        <p>Month-by-month heatmap of price changes per carrier and segment. Surfaces seasonality and competitive repricing cycles.</p>
+      </div>
+      <div class="sug-card">
+        <h4>Competitive Ranking</h4>
+        <p>Dynamic bar chart ranking carriers by lowest R$/GB at each point in time — who offers the best value per month.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Segment selector -->
+  <div class="hist-controls">
+    <span class="hist-label">Segment:</span>
+    <button class="seg-btn active" onclick="setHistSeg('prepaid',this)">Pre-Paid</button>
+    <button class="seg-btn" onclick="setHistSeg('controle',this)">Controle</button>
+    <button class="seg-btn" onclick="setHistSeg('postpaid',this)">Post-Paid</button>
+  </div>
+
+  <!-- Charts grid -->
+  <div class="chart-grid">
+
+    <!-- Price Evolution -->
+    <div class="chart-card">
+      <div class="chart-title">Monthly Price (R$)</div>
+      <div class="chart-subtitle">Entry-level plan price per carrier — Pre-Paid 30d</div>
+      <div class="chart-wrap" style="position:relative">
+        <canvas id="chartPrice"></canvas>
+        <div class="no-data-overlay" id="overlayPrice">
+          <div class="nd-icon">📈</div>
+          <div class="nd-title">Monitoring starts today</div>
+          <div class="nd-sub">Price history will populate as daily snapshots are collected.</div>
+        </div>
+      </div>
+      <div class="legend-row">
+        <div class="leg-item"><div class="leg-line" style="background:var(--vivo)"></div>Vivo</div>
+        <div class="leg-item"><div class="leg-line" style="background:var(--tim)"></div>TIM</div>
+        <div class="leg-item"><div class="leg-line" style="background:var(--claro)"></div>Claro</div>
+      </div>
+    </div>
+
+    <!-- R$/GB Efficiency -->
+    <div class="chart-card">
+      <div class="chart-title">R$/GB — Price Efficiency</div>
+      <div class="chart-subtitle">Monthly price ÷ plan base GB (lower = better value)</div>
+      <div class="chart-wrap" style="position:relative">
+        <canvas id="chartRperGB"></canvas>
+        <div class="no-data-overlay" id="overlayRperGB">
+          <div class="nd-icon">💡</div>
+          <div class="nd-title">Monitoring starts today</div>
+          <div class="nd-sub">Efficiency ratio will track as historical data accumulates.</div>
+        </div>
+      </div>
+      <div class="legend-row">
+        <div class="leg-item"><div class="leg-line" style="background:var(--vivo)"></div>Vivo</div>
+        <div class="leg-item"><div class="leg-line" style="background:var(--tim)"></div>TIM</div>
+        <div class="leg-item"><div class="leg-line" style="background:var(--claro)"></div>Claro</div>
+      </div>
+    </div>
+
+    <!-- Total GB evolution -->
+    <div class="chart-card">
+      <div class="chart-title">Total Plan GB (base)</div>
+      <div class="chart-subtitle">Base plan GB included per carrier — excludes variable bonuses</div>
+      <div class="chart-wrap" style="position:relative">
+        <canvas id="chartGB"></canvas>
+        <div class="no-data-overlay" id="overlayGB">
+          <div class="nd-icon">📊</div>
+          <div class="nd-title">Monitoring starts today</div>
+          <div class="nd-sub">GB history will build over time.</div>
+        </div>
+      </div>
+      <div class="legend-row">
+        <div class="leg-item"><div class="leg-line" style="background:var(--vivo)"></div>Vivo</div>
+        <div class="leg-item"><div class="leg-line" style="background:var(--tim)"></div>TIM</div>
+        <div class="leg-item"><div class="leg-line" style="background:var(--claro)"></div>Claro</div>
+      </div>
+    </div>
+
+    <!-- Current snapshot bar -->
+    <div class="chart-card">
+      <div class="chart-title">Current Snapshot — R$/GB Comparison</div>
+      <div class="chart-subtitle">Today's price efficiency across all segments (base plan GB only)</div>
+      <div class="chart-wrap" style="position:relative">
+        <canvas id="chartSnapshot"></canvas>
+      </div>
+    </div>
+
+    <!-- GB Breakdown stacked -->
+    <div class="chart-card chart-card-full">
+      <div class="chart-title">Plan Composition — GB Breakdown by Type (Current)</div>
+      <div class="chart-subtitle">Stacked bars showing plan GB vs bonus vs portability vs social for each carrier and segment</div>
+      <div class="chart-wrap-lg" style="position:relative">
+        <canvas id="chartComposition"></canvas>
+      </div>
+      <div class="legend-row" style="margin-top:12px">
+        <div class="leg-item"><div class="leg-line" style="background:var(--s1);height:8px;border-radius:2px"></div>Plan GB</div>
+        <div class="leg-item"><div class="leg-line" style="background:var(--s2);height:8px;border-radius:2px"></div>Permanent bonus</div>
+        <div class="leg-item"><div class="leg-line" style="background:var(--s3);height:8px;border-radius:2px"></div>Portability</div>
+        <div class="leg-item"><div class="leg-line" style="background:var(--s4);height:8px;border-radius:2px"></div>Social / streaming</div>
+      </div>
+    </div>
+
+  </div><!-- /chart-grid -->
+
+</div><!-- /panel history -->
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="w">
+    <div>© 2026 BTG Pactual TMT Research &nbsp;·&nbsp; Mobile Pricing Monitor &nbsp;·&nbsp; Data collected Apr 2, 2026</div>
+    <div>Sources: vivo.com.br · tim.com.br · claro.com.br · melhorplano.net · minhaconexao.com.br</div>
+  </div>
+</footer>
+
+<script>
+/* ── TAB NAVIGATION ──────────────────────────────────────────────── */
+function switchTab(id, el) {
+  document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  window.scrollTo({ top: document.querySelector('.subnav').offsetTop - 48, behavior: 'smooth' });
+}
+
+/* ── HISTORY SEGMENT SELECTOR ────────────────────────────────────── */
+function setHistSeg(seg, el) {
+  document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  updateSnapshotChart(seg);
+  updateCompositionChart(seg);
+}
+
+/* ── CHART.JS DEFAULTS ───────────────────────────────────────────── */
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#6b7280';
+
+const VIVO_C  = '#6e28c2';
+const TIM_C   = '#003087';
+const CLARO_C = '#cc0a19';
+
+/* ── SNAPSHOT BAR CHART ──────────────────────────────────────────── */
+const snapshotData = {
+  prepaid:  { vivo: 3.0,  tim: 2.5,  claro: 2.5  },
+  controle: { vivo: 2.81, tim: null,  claro: null  },
+  postpaid: { vivo: 2.8,  tim: 10.67, claro: 4.8  }
+};
+const snapshotLabels = {
+  prepaid:  ['Vivo\n(R$30 / 10GB)', 'TIM\n(R$30 / 12GB)', 'Claro\n(R$30 / 12GB)'],
+  controle: ['Vivo\n(R$59 / 21GB)', 'TIM\n(TBC / 15GB)', 'Claro\n(R$59.9 / N/D)'],
+  postpaid: ['Vivo\n(R$140 / 50GB)', 'TIM\n(R$160 / 15GB)', 'Claro\n(R$120 / 25GB)']
+};
+let snapChart;
+function buildSnapshotChart() {
+  const ctx = document.getElementById('chartSnapshot').getContext('2d');
+  snapChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Vivo', 'TIM', 'Claro'],
+      datasets: [{
+        label: 'R$/GB',
+        data: [3.0, 2.5, 2.5],
+        backgroundColor: [VIVO_C, TIM_C, CLARO_C],
+        borderRadius: 5,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` R$ ${ctx.parsed.y.toFixed(2)} per GB`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'R$/GB', font: { size: 10 } },
+          grid: { color: '#f0f2f5' }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+function updateSnapshotChart(seg) {
+  const d = snapshotData[seg];
+  snapChart.data.datasets[0].data = [d.vivo ?? 0, d.tim ?? 0, d.claro ?? 0];
+  snapChart.update();
+}
+
+/* ── COMPOSITION STACKED CHART ───────────────────────────────────── */
+const compData = {
+  prepaid: {
+    labels: ['Vivo Pre-Paid', 'TIM Pre-Paid', 'Claro Pre-Paid'],
+    plan:   [10, 12, 12],
+    bonus:  [1,  0,  0 ],
+    port:   [0,  0,  0 ],
+    social: [5,  4,  0 ]
+  },
+  controle: {
+    labels: ['Vivo Controle', 'TIM Controle', 'Claro Controle'],
+    plan:   [21, 15, 0 ],
+    bonus:  [6,  16, 10],
+    port:   [5,  0,  0 ],
+    social: [0,  0,  0 ]
+  },
+  postpaid: {
+    labels: ['Vivo Pós', 'TIM Black A', 'Claro Pós 70'],
+    plan:   [50, 15, 25],
+    bonus:  [6,  20, 20],
+    port:   [0,  0,  0 ],
+    social: [0,  5,  25]
+  }
+};
+let compChart;
+function buildCompositionChart() {
+  const ctx = document.getElementById('chartComposition').getContext('2d');
+  const d = compData.prepaid;
+  compChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: d.labels,
+      datasets: [
+        { label: 'Plan GB',        data: d.plan,   backgroundColor: '#1a56db', borderRadius: { topLeft:0, topRight:0, bottomLeft:5, bottomRight:5 }, stack:'a' },
+        { label: 'Permanent bonus',data: d.bonus,  backgroundColor: '#7c3aed', stack:'a' },
+        { label: 'Portability',    data: d.port,   backgroundColor: '#059669', stack:'a' },
+        { label: 'Social/streaming',data: d.social,backgroundColor: '#d97706', borderRadius: { topLeft:5, topRight:5 }, stack:'a' }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        y: {
+          stacked: true, beginAtZero: true,
+          title: { display: true, text: 'GB', font: { size: 10 } },
+          grid: { color: '#f0f2f5' }
+        },
+        x: { stacked: true, grid: { display: false } }
+      }
+    }
+  });
+}
+function updateCompositionChart(seg) {
+  const d = compData[seg];
+  compChart.data.labels = d.labels;
+  compChart.data.datasets[0].data = d.plan;
+  compChart.data.datasets[1].data = d.bonus;
+  compChart.data.datasets[2].data = d.port;
+  compChart.data.datasets[3].data = d.social;
+  compChart.update();
+}
+
+/* ── PLACEHOLDER LINE CHARTS (single data point = today) ────────── */
+function buildLinePlaceholder(canvasId, colors) {
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Apr 2, 2026'],
+      datasets: colors.map((c,i) => ({
+        label: ['Vivo','TIM','Claro'][i],
+        data: [null],
+        borderColor: c, backgroundColor: c+'22',
+        pointRadius: 3, tension: 0.35, fill: false
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: false, grid: { color: '#f0f2f5' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+/* ── INIT ────────────────────────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  buildLinePlaceholder('chartPrice',  [VIVO_C, TIM_C, CLARO_C]);
+  buildLinePlaceholder('chartRperGB', [VIVO_C, TIM_C, CLARO_C]);
+  buildLinePlaceholder('chartGB',     [VIVO_C, TIM_C, CLARO_C]);
+  buildSnapshotChart();
+  buildCompositionChart();
+});
+</script>
+
+</body>
+</html>
