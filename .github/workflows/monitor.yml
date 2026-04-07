@@ -1,12 +1,11 @@
 name: Telecom Price Monitor
 
 on:
-  # Daily at 09:00 BRT = 12:00 UTC (Brazil has no DST since 2019, fixed UTC-3)
-  schedule:
-    - cron: "0 12 * * *"
+  # Manual trigger only — run by sending "RODE" to Claude Code, which calls the API.
+  # To re-enable daily automatic runs, uncomment the schedule block below.
+  # schedule:
+  #   - cron: "0 12 * * *"   # 09:00 BRT = 12:00 UTC
 
-  # Manual trigger from the GitHub Actions UI or via GitHub CLI:
-  #   gh workflow run monitor.yml
   workflow_dispatch:
     inputs:
       dry_run:
