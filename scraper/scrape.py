@@ -346,70 +346,66 @@ def parse_claro_postpaid(text: str) -> Optional[dict]:
 # ── Scraping job definitions ──────────────────────────────────────────────────
 # Each job maps a segment/carrier to its URL, parser, and the JSON path inside
 # plans.json so we know where to compare and update.
+#
+# price_range / gb_range: plausible bounds for what these plans cost today.
+# Values outside these bounds are treated as parse errors (not real changes).
+# Set range wide enough to catch real changes but tight enough to reject garbage.
+# Rule of thumb: ±50% of current known value.
 
 SCRAPE_JOBS = [
     {
-        "segment":   "prepaid",
-        "carrier":   "vivo",
-        "url":       "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/pre-pago/vivo-pre",
-        "parser":    parse_vivo_prepaid,
-        "wait":      10,
+        "segment": "prepaid", "carrier": "vivo",
+        "url":     "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/pre-pago/vivo-pre",
+        "parser":  parse_vivo_prepaid, "wait": 10,
+        "price_range": (25, 55), "gb_range": (6, 20),
     },
     {
-        "segment":   "prepaid",
-        "carrier":   "tim",
-        "url":       "https://www.tim.com.br/sp/para-voce/planos/pre-pago",
-        "parser":    parse_tim_prepaid,
-        "wait":      8,
+        "segment": "prepaid", "carrier": "tim",
+        "url":     "https://www.tim.com.br/sp/para-voce/planos/pre-pago",
+        "parser":  parse_tim_prepaid, "wait": 8,
+        "price_range": (25, 55), "gb_range": (8, 20),
     },
     {
-        "segment":   "prepaid",
-        "carrier":   "claro",
-        "url":       "https://www.claro.com.br/celular/planos-pre/prezao",
-        "parser":    parse_claro_prepaid,
-        "wait":      8,
+        "segment": "prepaid", "carrier": "claro",
+        "url":     "https://www.claro.com.br/celular/planos-pre/prezao",
+        "parser":  parse_claro_prepaid, "wait": 8,
+        "price_range": (25, 55), "gb_range": (8, 20),
     },
     {
-        "segment":   "controle",
-        "carrier":   "vivo",
-        "url":       "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-controle",
-        "parser":    parse_vivo_controle,
-        "wait":      10,
+        "segment": "controle", "carrier": "vivo",
+        "url":     "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-controle",
+        "parser":  parse_vivo_controle, "wait": 10,
+        "price_range": (45, 100), "gb_range": (15, 40),
     },
     {
-        "segment":   "controle",
-        "carrier":   "tim",
-        "url":       "https://www.tim.com.br/rj/para-voce/planos/controle",
-        "parser":    parse_tim_controle,
-        "wait":      8,
+        "segment": "controle", "carrier": "tim",
+        "url":     "https://www.tim.com.br/rj/para-voce/planos/controle",
+        "parser":  parse_tim_controle, "wait": 8,
+        "price_range": (45, 100), "gb_range": (10, 50),
     },
     {
-        "segment":   "controle",
-        "carrier":   "claro",
-        "url":       "https://www.claro.com.br/celular/controle",
-        "parser":    parse_claro_controle,
-        "wait":      8,
+        "segment": "controle", "carrier": "claro",
+        "url":     "https://www.claro.com.br/celular/controle",
+        "parser":  parse_claro_controle, "wait": 8,
+        "price_range": (45, 100), "gb_range": (10, 50),
     },
     {
-        "segment":   "postpaid",
-        "carrier":   "vivo",
-        "url":       "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-pos-pago",
-        "parser":    parse_vivo_postpaid,
-        "wait":      10,
+        "segment": "postpaid", "carrier": "vivo",
+        "url":     "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-pos-pago",
+        "parser":  parse_vivo_postpaid, "wait": 10,
+        "price_range": (100, 220), "gb_range": (30, 120),
     },
     {
-        "segment":   "postpaid",
-        "carrier":   "tim",
-        "url":       "https://www.tim.com.br/rj/para-voce/planos/pos-pago/tim-black",
-        "parser":    parse_tim_postpaid,
-        "wait":      8,
+        "segment": "postpaid", "carrier": "tim",
+        "url":     "https://www.tim.com.br/rj/para-voce/planos/pos-pago/tim-black",
+        "parser":  parse_tim_postpaid, "wait": 8,
+        "price_range": (100, 250), "gb_range": (10, 80),
     },
     {
-        "segment":   "postpaid",
-        "carrier":   "claro",
-        "url":       "https://www.claro.com.br/celular/pos",
-        "parser":    parse_claro_postpaid,
-        "wait":      8,
+        "segment": "postpaid", "carrier": "claro",
+        "url":     "https://www.claro.com.br/celular/pos",
+        "parser":  parse_claro_postpaid, "wait": 8,
+        "price_range": (80, 200), "gb_range": (20, 100),
     },
 ]
 
@@ -464,6 +460,17 @@ def find_plan(data: dict, segment: str, carrier: str) -> Optional[dict]:
     return None
 
 
+def _in_range(value: Any, bounds: Optional[tuple]) -> bool:
+    """Return True if value is within bounds (lo, hi), or if no bounds defined."""
+    if bounds is None or value is None:
+        return True
+    lo, hi = bounds
+    try:
+        return lo <= float(value) <= hi
+    except (TypeError, ValueError):
+        return False
+
+
 def detect_changes(
     data: dict,
     job: dict,
@@ -472,8 +479,9 @@ def detect_changes(
     """
     Compare scraped values against stored plan. Returns list of change dicts.
     A change is only recorded when:
-      - The scraped value is not None (i.e. scraping succeeded for that field)
+      - The scraped value is not None
       - The scraped value differs from the stored value
+      - The scraped value falls within the job's plausible range (rejects garbage)
       - The plan is not marked scrape_status='manual'
     """
     segment = job["segment"]
@@ -487,18 +495,28 @@ def detect_changes(
         log.info(f"Skipping {segment}/{carrier} — status is 'manual'")
         return []
 
+    price_range = job.get("price_range")
+    gb_range    = job.get("gb_range")
+
     changes = []
     for field_key, json_path in WATCHED_FIELDS.items():
         scraped_val = scraped.get(field_key)
         stored_val  = get_nested(plan, *json_path)
 
         if scraped_val is None:
-            # Scraping didn't return this field — don't flag as change
             continue
 
-        # Normalize to same type for comparison
+        # Validate plausibility — discard values outside expected range
+        bounds = price_range if field_key == "price" else gb_range
+        if not _in_range(scraped_val, bounds):
+            log.warning(
+                f"Implausible scraped value for {carrier} {segment} {field_key}: "
+                f"{scraped_val} (expected {bounds}) — discarding"
+            )
+            continue
+
+        # Normalize types for comparison
         if field_key == "price":
-            # Round to 2 decimal places to avoid float noise
             scraped_val = round(float(scraped_val), 2)
             stored_cmp  = round(float(stored_val), 2) if stored_val is not None else None
         else:
