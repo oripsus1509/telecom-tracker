@@ -108,36 +108,36 @@
           "plan_gb": 12
         },
         "claro": {
-          "price": 30.0,
-          "plan_gb": 12
+          "price": 1.0,
+          "plan_gb": 8
         }
       },
       "controle": {
         "vivo": {
           "price": 59.0,
-          "plan_gb": 21
-        },
-        "tim": {
-          "price": null,
           "plan_gb": 15
         },
+        "tim": {
+          "price": 43.9,
+          "plan_gb": 20
+        },
         "claro": {
-          "price": 59.9,
-          "plan_gb": null
+          "price": 44.0,
+          "plan_gb": 10
         }
       },
       "postpaid": {
         "vivo": {
-          "price": 140.0,
+          "price": 133.0,
           "plan_gb": 50
         },
         "tim": {
-          "price": 159.99,
-          "plan_gb": 15
+          "price": 119.99,
+          "plan_gb": 10
         },
         "claro": {
-          "price": 119.9,
-          "plan_gb": 25
+          "price": 119.0,
+          "plan_gb": 20
         }
       }
     }
@@ -342,7 +342,7 @@
           "scrape_url": "https://www.claro.com.br/celular/planos-pre/prezao",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": 12,
+            "plan_gb": 8,
             "total_displayed": 12,
             "total_label": "plan data",
             "bar": [
@@ -419,9 +419,9 @@
           "price_pending": false,
           "currency": "R$",
           "scrape_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-controle",
-          "scrape_status": "blocked",
+          "scrape_status": "ok",
           "gb": {
-            "plan_gb": 21,
+            "plan_gb": 15,
             "total_displayed": 32,
             "total_label": "potential total",
             "bar": [
@@ -520,9 +520,9 @@
           "price_pending": true,
           "currency": "R$",
           "scrape_url": "https://www.tim.com.br/rj/para-voce/planos/controle",
-          "scrape_status": "blocked",
+          "scrape_status": "ok",
           "gb": {
-            "plan_gb": 15,
+            "plan_gb": 20,
             "total_displayed": 31,
             "total_label": "total included",
             "bar": [
@@ -613,7 +613,7 @@
           "scrape_url": "https://www.claro.com.br/celular/controle",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": null,
+            "plan_gb": 10,
             "total_displayed": 10,
             "total_label": "bonus included",
             "bar": [
@@ -680,13 +680,13 @@
         {
           "carrier": "vivo",
           "plan_name": "Vivo Pós — Entry",
-          "price": 140.0,
+          "price": 133.0,
           "price_display": "140",
           "price_period": "per month",
           "price_pending": false,
           "currency": "R$",
           "scrape_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-pos-pago",
-          "scrape_status": "blocked",
+          "scrape_status": "ok",
           "gb": {
             "plan_gb": 50,
             "total_displayed": 56,
@@ -776,7 +776,7 @@
         {
           "carrier": "tim",
           "plan_name": "TIM Black A",
-          "price": 159.99,
+          "price": 119.99,
           "price_display": "159,99",
           "price_period": "per month",
           "price_pending": false,
@@ -784,7 +784,7 @@
           "scrape_url": "https://www.tim.com.br/rj/para-voce/planos/pos-pago/tim-black",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": 15,
+            "plan_gb": 10,
             "total_displayed": 40,
             "total_label": "total (up to 70 GB w/ super-bonus)",
             "bar": [
@@ -881,7 +881,7 @@
         {
           "carrier": "claro",
           "plan_name": "Claro Pós 70 GB",
-          "price": 119.9,
+          "price": 119.0,
           "price_display": "119,90",
           "price_period": "per month",
           "price_pending": false,
@@ -889,7 +889,7 @@
           "scrape_url": "https://www.claro.com.br/celular/pos",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": 25,
+            "plan_gb": 20,
             "total_displayed": 70,
             "total_label": "total included",
             "bar": [
