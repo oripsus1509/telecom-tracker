@@ -118,8 +118,8 @@
           "plan_gb": 21
         },
         "tim": {
-          "price": null,
-          "plan_gb": 15
+          "price": 49.99,
+          "plan_gb": 20
         },
         "claro": {
           "price": 59.9,
@@ -132,8 +132,8 @@
           "plan_gb": 50
         },
         "tim": {
-          "price": 159.99,
-          "plan_gb": 15
+          "price": 119.99,
+          "plan_gb": 70
         },
         "claro": {
           "price": 119.9,
@@ -514,7 +514,7 @@
         {
           "carrier": "tim",
           "plan_name": "TIM Controle",
-          "price": null,
+          "price": 49.99,
           "price_display": null,
           "price_period": "DDD 11",
           "price_pending": true,
@@ -776,7 +776,7 @@
         {
           "carrier": "tim",
           "plan_name": "TIM Black A",
-          "price": 159.99,
+          "price": 119.99,
           "price_display": "159,99",
           "price_period": "per month",
           "price_pending": false,
@@ -784,7 +784,7 @@
           "scrape_url": "https://www.tim.com.br/rj/para-voce/planos/pos-pago/tim-black",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": 15,
+            "plan_gb": 70,
             "total_displayed": 40,
             "total_label": "total (up to 70 GB w/ super-bonus)",
             "bar": [
