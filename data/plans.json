@@ -9,136 +9,55 @@
     {
       "date": "2026-04-02",
       "prepaid": {
-        "vivo": {
-          "price": 30.0,
-          "plan_gb": 10
-        },
-        "tim": {
-          "price": 30.0,
-          "plan_gb": 12
-        },
-        "claro": {
-          "price": 30.0,
-          "plan_gb": 12
-        }
+        "vivo": {"price": 30.0, "plan_gb": 10},
+        "tim":  {"price": 30.0, "plan_gb": 12},
+        "claro":{"price": 30.0, "plan_gb": 12}
       },
       "controle": {
-        "vivo": {
-          "price": 59.0,
-          "plan_gb": 21
-        },
-        "tim": {
-          "price": null,
-          "plan_gb": 15
-        },
-        "claro": {
-          "price": 59.9,
-          "plan_gb": null
-        }
+        "vivo": {"price": 59.0,  "plan_gb": 21},
+        "tim":  {"price": null,   "plan_gb": 15},
+        "claro":{"price": 59.9,  "plan_gb": null}
       },
       "postpaid": {
-        "vivo": {
-          "price": 140.0,
-          "plan_gb": 50
-        },
-        "tim": {
-          "price": 159.99,
-          "plan_gb": 15
-        },
-        "claro": {
-          "price": 119.9,
-          "plan_gb": 25
-        }
+        "vivo": {"price": 140.0,  "plan_gb": 50},
+        "tim":  {"price": 159.99, "plan_gb": 15},
+        "claro":{"price": 119.9,  "plan_gb": 25}
       }
     },
     {
       "date": "2026-04-06",
       "prepaid": {
-        "vivo": {
-          "price": 30.0,
-          "plan_gb": 10
-        },
-        "tim": {
-          "price": 30.0,
-          "plan_gb": 12
-        },
-        "claro": {
-          "price": 30.0,
-          "plan_gb": 12
-        }
+        "vivo": {"price": 30.0, "plan_gb": 10},
+        "tim":  {"price": 30.0, "plan_gb": 12},
+        "claro":{"price": 30.0, "plan_gb": 12}
       },
       "controle": {
-        "vivo": {
-          "price": 59.0,
-          "plan_gb": 21
-        },
-        "tim": {
-          "price": null,
-          "plan_gb": 15
-        },
-        "claro": {
-          "price": 59.9,
-          "plan_gb": null
-        }
+        "vivo": {"price": 59.0,  "plan_gb": 21},
+        "tim":  {"price": null,   "plan_gb": 15},
+        "claro":{"price": 59.9,  "plan_gb": null}
       },
       "postpaid": {
-        "vivo": {
-          "price": 140.0,
-          "plan_gb": 50
-        },
-        "tim": {
-          "price": 159.99,
-          "plan_gb": 15
-        },
-        "claro": {
-          "price": 119.9,
-          "plan_gb": 25
-        }
+        "vivo": {"price": 140.0,  "plan_gb": 50},
+        "tim":  {"price": 159.99, "plan_gb": 15},
+        "claro":{"price": 119.9,  "plan_gb": 25}
       }
     },
     {
       "date": "2026-04-07",
       "prepaid": {
-        "vivo": {
-          "price": 30.0,
-          "plan_gb": 10
-        },
-        "tim": {
-          "price": 30.0,
-          "plan_gb": 12
-        },
-        "claro": {
-          "price": 30.0,
-          "plan_gb": 12
-        }
+        "vivo": {"price": 30.0, "plan_gb": 10},
+        "tim":  {"price": 30.0, "plan_gb": 12},
+        "claro":{"price": 30.0, "plan_gb": 12}
       },
       "controle": {
-        "vivo": {
-          "price": 59.0,
-          "plan_gb": 21
-        },
-        "tim": {
-          "price": 49.99,
-          "plan_gb": 20
-        },
-        "claro": {
-          "price": 59.9,
-          "plan_gb": null
-        }
+        "vivo": {"price": 59.0,  "plan_gb": 15},
+        "tim":  {"price": 49.99, "plan_gb": 20},
+        "claro":{"price": 59.9,  "plan_gb": 15}
       },
       "postpaid": {
-        "vivo": {
-          "price": 140.0,
-          "plan_gb": 50
-        },
-        "tim": {
-          "price": 119.99,
-          "plan_gb": 70
-        },
-        "claro": {
-          "price": 119.9,
-          "plan_gb": 25
-        }
+        "vivo": {"price": 150.0,  "plan_gb": 50},
+        "tim":  {"price": 119.99, "plan_gb": 40},
+        "claro":{"price": 119.9,  "plan_gb": 25}
       }
     }
   ],
@@ -150,7 +69,7 @@
       "plans": [
         {
           "carrier": "vivo",
-          "plan_name": "Vivo Turbo 10 GB",
+          "plan_name": "Vivo Pré 20 GB",
           "price": 30.0,
           "price_display": "30",
           "price_period": "per 30 days",
@@ -160,84 +79,31 @@
           "scrape_status": "blocked",
           "gb": {
             "plan_gb": 10,
-            "total_displayed": 10,
-            "total_label": "plan data",
+            "total_displayed": 20,
+            "total_label": "total (10 plan + 5 bônus + 5 YouTube)",
             "bar": [
-              {
-                "type": "plan",
-                "pct": 62
-              },
-              {
-                "type": "bonus",
-                "pct": 6
-              },
-              {
-                "type": "stream",
-                "pct": 32
-              }
+              {"type": "plan",   "pct": 50},
+              {"type": "bonus",  "pct": 25},
+              {"type": "stream", "pct": 25}
             ],
             "legend": [
-              {
-                "type": "plan",
-                "amount": "10 GB",
-                "label": "plan"
-              },
-              {
-                "type": "bonus",
-                "amount": "+1 GB",
-                "label": "monthly bonus*"
-              },
-              {
-                "type": "stream",
-                "amount": "+5 GB",
-                "label": "YouTube (free)"
-              }
+              {"type": "plan",   "amount": "10 GB", "label": "uso livre"},
+              {"type": "bonus",  "amount": "+5 GB",  "label": "bônus"},
+              {"type": "stream", "amount": "+5 GB",  "label": "YouTube (free)"}
             ],
-            "note": "* +1 GB bonus unlocked by accumulating R$35+ in recharges/month. YouTube GB does not count against plan quota."
+            "note": "+10 GB bônus na portabilidade (válido por 1 ano). YouTube GB não desconta da franquia."
           },
           "features": [
-            {
-              "label": "Unlimited domestic calls",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "WhatsApp free (no data deduction)",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "Streaming included",
-              "value": "Partial — see below",
-              "status": "partial"
-            },
-            {
-              "label": "International roaming",
-              "value": "✗ No",
-              "status": "no"
-            }
+            {"label": "Unlimited domestic calls",          "value": "✓ Yes (via 15)",            "status": "yes"},
+            {"label": "WhatsApp free (no data deduction)", "value": "✓ Yes",                      "status": "yes"},
+            {"label": "Streaming included",                "value": "Partial — digital services", "status": "partial"},
+            {"label": "International roaming",             "value": "✗ No",                       "status": "no"}
           ],
           "extras": [
-            {
-              "icon_class": "ei-stream",
-              "icon": "📚",
-              "text": "Skeelo · GoRead · Hube Jornais · Babbel"
-            },
-            {
-              "icon_class": "ei-stream",
-              "icon": "🤖",
-              "text": "1 year Perplexity Pro"
-            },
-            {
-              "icon_class": "ei-promo",
-              "icon": "🎬",
-              "text": "50% Cinemark discount (monthly)"
-            },
-            {
-              "icon_class": "ei-reward",
-              "icon": "💰",
-              "text": "Vale Bônus R$50/month"
-            }
+            {"icon_class": "ei-promo",  "icon": "📶", "text": "+10 GB bônus na portabilidade (1 ano)"},
+            {"icon_class": "ei-stream", "icon": "▶️", "text": "+5 GB para YouTube (não desconta da franquia)"},
+            {"icon_class": "ei-stream", "icon": "📱", "text": "Serviços Digitais inclusos (Skeelo, Hube e outros)"},
+            {"icon_class": "ei-promo",  "icon": "🌐", "text": "Compartilhe e receba internet"}
           ],
           "source_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/pre-pago/vivo-pre",
           "source_label": "vivo.com.br",
@@ -259,72 +125,27 @@
             "total_displayed": 16,
             "total_label": "total (12 plan + 4 social)",
             "bar": [
-              {
-                "type": "plan",
-                "pct": 75
-              },
-              {
-                "type": "social",
-                "pct": 25
-              }
+              {"type": "plan",   "pct": 75},
+              {"type": "social", "pct": 25}
             ],
             "legend": [
-              {
-                "type": "plan",
-                "amount": "12 GB",
-                "label": "plan"
-              },
-              {
-                "type": "social",
-                "amount": "+4 GB",
-                "label": "social (Facebook, Instagram, X)"
-              }
+              {"type": "plan",   "amount": "12 GB", "label": "da oferta"},
+              {"type": "social", "amount": "+4 GB",  "label": "social (Facebook, Instagram, X)"}
             ],
-            "note": "* 4 GB social package available on recharges ≥ R$30. Social GB does not count against plan quota."
+            "note": "+3 GB bônus ao recarregar pelo App Meu TIM ou WhatsApp. Social GB não desconta da franquia."
           },
           "features": [
-            {
-              "label": "Unlimited domestic calls",
-              "value": "✓ Yes (via *41)",
-              "status": "yes"
-            },
-            {
-              "label": "WhatsApp free (no data deduction)",
-              "value": "✓ Yes — voice & video",
-              "status": "yes"
-            },
-            {
-              "label": "Streaming included",
-              "value": "✓ Prime Video mobile",
-              "status": "yes"
-            },
-            {
-              "label": "International roaming",
-              "value": "✗ No",
-              "status": "no"
-            }
+            {"label": "Unlimited domestic calls",          "value": "✓ Yes (via 41)",       "status": "yes"},
+            {"label": "WhatsApp free (no data deduction)", "value": "✓ Yes — voice & video", "status": "yes"},
+            {"label": "Streaming included",                "value": "✗ No",                  "status": "no"},
+            {"label": "International roaming",             "value": "✗ No",                  "status": "no"}
           ],
           "extras": [
-            {
-              "icon_class": "ei-reward",
-              "icon": "💳",
-              "text": "Pix cashback: R$3 on recharges ≥ R$30"
-            },
-            {
-              "icon_class": "ei-promo",
-              "icon": "🛒",
-              "text": "R$15 Zé Delivery voucher (min. R$70 order)"
-            },
-            {
-              "icon_class": "ei-promo",
-              "icon": "🏥",
-              "text": "Cartão de Todos: 3 months free (health/pharmacy)"
-            },
-            {
-              "icon_class": "ei-reward",
-              "icon": "🎁",
-              "text": "Prize draw: R$10,000 gift card (\"Recarga Premiada\")"
-            }
+            {"icon_class": "ei-reward", "icon": "💳", "text": "Pix cashback: R$3 em recargas pelo app"},
+            {"icon_class": "ei-promo",  "icon": "📶", "text": "+3 GB bônus recarregando pelo App Meu TIM ou WhatsApp"},
+            {"icon_class": "ei-promo",  "icon": "🛒", "text": "Zé Delivery: R$15 de desconto em compras a partir de R$70"},
+            {"icon_class": "ei-stream", "icon": "📚", "text": "Aya Minibooks Light C incluso"},
+            {"icon_class": "ei-promo",  "icon": "🏥", "text": "Cartão de TODOS: 30% desconto nas 3 primeiras mensalidades"}
           ],
           "source_url": "https://www.tim.com.br/sp/para-voce/planos/pre-pago",
           "source_label": "tim.com.br",
@@ -343,60 +164,27 @@
           "scrape_status": "ok",
           "gb": {
             "plan_gb": 12,
-            "total_displayed": 12,
-            "total_label": "plan data",
+            "total_displayed": 15,
+            "total_label": "total (12 uso livre + 3 YouTube)",
             "bar": [
-              {
-                "type": "plan",
-                "pct": 55
-              },
-              {
-                "type": "bonus",
-                "pct": 45
-              }
+              {"type": "plan",   "pct": 80},
+              {"type": "stream", "pct": 20}
             ],
             "legend": [
-              {
-                "type": "plan",
-                "amount": "12 GB",
-                "label": "plan"
-              },
-              {
-                "type": "bonus",
-                "amount": "+10 GB",
-                "label": "1st digital recharge bonus (7 days)*"
-              }
+              {"type": "plan",   "amount": "12 GB", "label": "uso livre"},
+              {"type": "stream", "amount": "+3 GB",  "label": "YouTube (free)"}
             ],
-            "note": "* 10 GB bonus valid 7 days, only on 1st recharge ≥ R$20 via app/website. Subsequent recharges: +1–3 GB (7 days each)."
+            "note": "WhatsApp ilimitado incluso. Ligações ilimitadas para todo o Brasil."
           },
           "features": [
-            {
-              "label": "Unlimited domestic calls",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "WhatsApp free (no data deduction)",
-              "value": "✓ Yes — voice & video",
-              "status": "yes"
-            },
-            {
-              "label": "Streaming included",
-              "value": "✗ No",
-              "status": "no"
-            },
-            {
-              "label": "International roaming",
-              "value": "✗ No",
-              "status": "no"
-            }
+            {"label": "Unlimited domestic calls",          "value": "✓ Yes",  "status": "yes"},
+            {"label": "WhatsApp free (no data deduction)", "value": "✓ Yes",  "status": "yes"},
+            {"label": "Streaming included",                "value": "✗ No",   "status": "no"},
+            {"label": "International roaming",             "value": "✗ No",   "status": "no"}
           ],
           "extras": [
-            {
-              "icon_class": "ei-promo",
-              "icon": "📲",
-              "text": "Activate monthly plan: SMS \"MES\" to 2006"
-            }
+            {"icon_class": "ei-stream", "icon": "▶️", "text": "+3 GB para YouTube (não desconta da franquia)"},
+            {"icon_class": "ei-promo",  "icon": "📞", "text": "Ligações ilimitadas para todo o Brasil"}
           ],
           "source_url": "https://www.claro.com.br/celular/planos-pre/prezao",
           "source_label": "claro.com.br",
@@ -408,103 +196,45 @@
     "controle": {
       "label": "Controle Plans — Entry Level",
       "sublabel": "Cheapest controle plan per carrier · DDD 11, São Paulo",
-      "info": "Controle plans have a fixed monthly bill with no mandatory loyalty period. Portability bonus (+5 GB / 12 months) and extras via automatic debit or digital invoice can increase total data significantly.",
+      "info": "Controle plans have a fixed monthly bill with no mandatory loyalty period. Bonus data and extras can increase total data significantly.",
       "plans": [
         {
           "carrier": "vivo",
-          "plan_name": "Vivo Controle 21 GB",
+          "plan_name": "Vivo Controle 35 GB",
           "price": 59.0,
           "price_display": "59",
           "price_period": "per month",
           "price_pending": false,
           "currency": "R$",
           "scrape_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-controle",
-          "scrape_status": "ok",
+          "scrape_status": "blocked",
           "gb": {
-            "plan_gb": 21,
-            "total_displayed": 32,
-            "total_label": "potential total",
+            "plan_gb": 15,
+            "total_displayed": 35,
+            "total_label": "total (15 franquia + 20 bônus 1 ano)",
             "bar": [
-              {
-                "type": "plan",
-                "pct": 66
-              },
-              {
-                "type": "bonus",
-                "pct": 18
-              },
-              {
-                "type": "port",
-                "pct": 16
-              }
+              {"type": "plan",  "pct": 43},
+              {"type": "bonus", "pct": 57}
             ],
             "legend": [
-              {
-                "type": "plan",
-                "amount": "21 GB",
-                "label": "plan"
-              },
-              {
-                "type": "bonus",
-                "amount": "+3 GB",
-                "label": "digital invoice · +3 GB auto debit"
-              },
-              {
-                "type": "port",
-                "amount": "+5 GB",
-                "label": "portability (12 mo.)"
-              }
+              {"type": "plan",  "amount": "15 GB", "label": "franquia"},
+              {"type": "bonus", "amount": "+20 GB", "label": "bônus (1 ano)"}
             ],
-            "note": "* Digital invoice & auto debit bonuses are ongoing while criteria are met. Portability bonus valid for 12 months for customers switching carriers."
+            "note": "+10 GB redes sociais e vídeo disponível por +R$5/mês (add-on opcional). Bônus de 20 GB válido por 1 ano."
           },
           "features": [
-            {
-              "label": "Unlimited domestic calls",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "WhatsApp / Waze / Moovit free",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "Streaming included",
-              "value": "3 mo. Amazon Prime",
-              "status": "partial"
-            },
-            {
-              "label": "International roaming",
-              "value": "✗ No",
-              "status": "no"
-            },
-            {
-              "label": "No loyalty contract",
-              "value": "✓ Yes",
-              "status": "yes"
-            }
+            {"label": "Unlimited domestic calls",          "value": "✓ Yes",              "status": "yes"},
+            {"label": "WhatsApp / apps free",              "value": "✓ Yes",              "status": "yes"},
+            {"label": "Streaming included",                "value": "3 mo. Amazon Prime", "status": "partial"},
+            {"label": "International roaming",             "value": "✗ No",               "status": "no"},
+            {"label": "No loyalty contract",               "value": "✓ Yes",              "status": "yes"}
           ],
           "extras": [
-            {
-              "icon_class": "ei-promo",
-              "icon": "🎬",
-              "text": "50% Cinemark discount (monthly)"
-            },
-            {
-              "icon_class": "ei-reward",
-              "icon": "🏪",
-              "text": "Vivo Valoriza — discounts at 3,000+ venues"
-            },
-            {
-              "icon_class": "ei-reward",
-              "icon": "💰",
-              "text": "Vale Bônus up to R$100/month"
-            },
-            {
-              "icon_class": "ei-stream",
-              "icon": "📱",
-              "text": "Optional social pack +R$5/mo (YouTube, TikTok, Instagram, Facebook, X, Tinder, Pinterest — 2× data)"
-            }
+            {"icon_class": "ei-stream", "icon": "📦", "text": "3 meses de Amazon Prime de cortesia"},
+            {"icon_class": "ei-stream", "icon": "🤖", "text": "1 ano Perplexity Pro"},
+            {"icon_class": "ei-promo",  "icon": "🎬", "text": "Meia-entrada na Cinemark todo mês"},
+            {"icon_class": "ei-reward", "icon": "💰", "text": "Vale Bônus de R$50 todo mês"},
+            {"icon_class": "ei-stream", "icon": "📱", "text": "Add-on opcional: +10 GB redes sociais e vídeo por R$5/mês"}
           ],
           "source_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-controle",
           "source_label": "vivo.com.br",
@@ -513,98 +243,51 @@
         },
         {
           "carrier": "tim",
-          "plan_name": "TIM Controle",
+          "plan_name": "TIM Controle Plus",
           "price": 49.99,
-          "price_display": null,
-          "price_period": "DDD 11",
-          "price_pending": true,
+          "price_display": "49,99",
+          "price_period": "per month",
+          "price_pending": false,
           "currency": "R$",
-          "scrape_url": "https://www.tim.com.br/rj/para-voce/planos/controle",
+          "scrape_url": "https://www.tim.com.br/sp/para-voce/planos/controle",
           "scrape_status": "ok",
           "gb": {
             "plan_gb": 20,
-            "total_displayed": 31,
-            "total_label": "total included",
+            "total_displayed": 45,
+            "total_label": "total (20 plano + 10 promo + 10 bônus + 5 social)",
             "bar": [
-              {
-                "type": "plan",
-                "pct": 48
-              },
-              {
-                "type": "bonus",
-                "pct": 33
-              },
-              {
-                "type": "port",
-                "pct": 19
-              }
+              {"type": "plan",   "pct": 44},
+              {"type": "bonus",  "pct": 45},
+              {"type": "social", "pct": 11}
             ],
             "legend": [
-              {
-                "type": "plan",
-                "amount": "15 GB",
-                "label": "plan"
-              },
-              {
-                "type": "bonus",
-                "amount": "+10 GB",
-                "label": "promo bonus"
-              },
-              {
-                "type": "port",
-                "amount": "+6 GB",
-                "label": "special bonus"
-              }
+              {"type": "plan",   "amount": "20 GB", "label": "do plano"},
+              {"type": "bonus",  "amount": "+20 GB", "label": "promo (10) + bônus especial (10)"},
+              {"type": "social", "amount": "+5 GB",  "label": "redes sociais (X, Facebook, Instagram)"}
             ],
-            "note": "* Price for DDD 11 not retrieved (website blocked). GB data compiled from third-party sources. Please verify at tim.com.br."
+            "note": "R$49,99/mês com permanência de 12 meses. R$108,99/mês sem permanência mínima. Social GB não desconta da franquia."
           },
           "features": [
-            {
-              "label": "Unlimited domestic calls",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "WhatsApp free (no data deduction)",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "Streaming included",
-              "value": "✗ No",
-              "status": "no"
-            },
-            {
-              "label": "International roaming",
-              "value": "✗ No",
-              "status": "no"
-            },
-            {
-              "label": "No loyalty contract",
-              "value": "✓ Yes",
-              "status": "yes"
-            }
+            {"label": "Unlimited domestic calls",          "value": "✓ Yes (via 41)",                    "status": "yes"},
+            {"label": "WhatsApp free (no data deduction)", "value": "✓ Yes",                              "status": "yes"},
+            {"label": "Streaming included",                "value": "✓ Monthly choice",                  "status": "yes"},
+            {"label": "International roaming",             "value": "✗ No",                              "status": "no"},
+            {"label": "No loyalty contract",               "value": "⚠ 12-month loyalty for best price", "status": "partial"}
           ],
           "extras": [
-            {
-              "icon_class": "ei-reward",
-              "icon": "⭐",
-              "text": "TIM Mais rewards program access"
-            },
-            {
-              "icon_class": "ei-stream",
-              "icon": "📡",
-              "text": "National roaming included"
-            }
+            {"icon_class": "ei-stream", "icon": "🎬", "text": "Streaming mensal à escolha: Deezer Now · Paramount+ · Prime Video Versão Celular"},
+            {"icon_class": "ei-stream", "icon": "📺", "text": "Globoplay incluso (promo BBB — confirmar duração)"},
+            {"icon_class": "ei-promo",  "icon": "📡", "text": "Roaming Nacional incluso"},
+            {"icon_class": "ei-reward", "icon": "⭐", "text": "TIM MAIS — sorteios, viagens e descontos"}
           ],
-          "source_url": "https://www.tim.com.br/rj/para-voce/planos/controle",
+          "source_url": "https://www.tim.com.br/sp/para-voce/planos/controle",
           "source_label": "tim.com.br",
-          "verified": false,
-          "verified_label": "Price pending"
+          "verified": true,
+          "verified_label": "Verified"
         },
         {
           "carrier": "claro",
-          "plan_name": "Claro Controle",
+          "plan_name": "Claro Controle 30 GB",
           "price": 59.9,
           "price_display": "59,90",
           "price_period": "per month",
@@ -613,57 +296,31 @@
           "scrape_url": "https://www.claro.com.br/celular/controle",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": 10,
-            "total_displayed": 10,
-            "total_label": "bonus included",
+            "plan_gb": 15,
+            "total_displayed": 30,
+            "total_label": "total (15 uso livre + 10 bônus + 5 social)",
             "bar": [
-              {
-                "type": "bonus",
-                "pct": 100
-              }
+              {"type": "plan",   "pct": 50},
+              {"type": "bonus",  "pct": 33},
+              {"type": "social", "pct": 17}
             ],
             "legend": [
-              {
-                "type": "bonus",
-                "amount": "+10 GB",
-                "label": "bonus (base GB not disclosed)"
-              }
+              {"type": "plan",   "amount": "15 GB", "label": "uso livre"},
+              {"type": "bonus",  "amount": "+10 GB", "label": "bônus uso livre"},
+              {"type": "social", "amount": "+5 GB",  "label": "redes sociais e apps"}
             ],
-            "note": "* Base plan GB not published on official page at time of collection. 10 GB bonus confirmed. Verify full details at claro.com.br."
+            "note": "WhatsApp e ligações ilimitados inclusos. Redes sociais e apps: YouTube, Instagram, Facebook, TikTok e outros."
           },
           "features": [
-            {
-              "label": "Unlimited domestic calls",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "WhatsApp / Waze / Claro Música free",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "Social apps free (FB, Instagram, X)",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "Streaming included",
-              "value": "✗ No",
-              "status": "no"
-            },
-            {
-              "label": "No loyalty contract",
-              "value": "✓ Yes",
-              "status": "yes"
-            }
+            {"label": "Unlimited domestic calls",               "value": "✓ Yes",                "status": "yes"},
+            {"label": "WhatsApp free (no data deduction)",      "value": "✓ Yes",                "status": "yes"},
+            {"label": "Social apps free (YouTube, IG, FB, TT)", "value": "✓ Yes",                "status": "yes"},
+            {"label": "Streaming included",                     "value": "Partial — 30d Claro tv+","status": "partial"},
+            {"label": "No loyalty contract",                    "value": "✓ Yes",                "status": "yes"}
           ],
           "extras": [
-            {
-              "icon_class": "ei-reward",
-              "icon": "💲",
-              "text": "Fixed monthly bill — cancel anytime"
-            }
+            {"icon_class": "ei-stream", "icon": "📺", "text": "30 dias de Claro tv+ App incluso"},
+            {"icon_class": "ei-reward", "icon": "💲", "text": "Conta fixa — cancele quando quiser"}
           ],
           "source_url": "https://www.claro.com.br/celular/controle",
           "source_label": "claro.com.br",
@@ -675,98 +332,45 @@
     "postpaid": {
       "label": "Post-Paid Plans — Entry Level Individual",
       "sublabel": "Cheapest individual post-paid plan per carrier",
-      "info": "Entry-level post-paid plans typically include streaming of the customer's choice. Portability bonuses and super-bonuses can significantly expand data allowances.",
+      "info": "Entry-level post-paid plans typically include streaming of the customer's choice. Portability bonuses and promotions can significantly expand data allowances.",
       "plans": [
         {
           "carrier": "vivo",
-          "plan_name": "Vivo Pós — Entry",
-          "price": 140.0,
-          "price_display": "140",
+          "plan_name": "Vivo Pós com Amazon 63 GB",
+          "price": 150.0,
+          "price_display": "150",
           "price_period": "per month",
           "price_pending": false,
           "currency": "R$",
           "scrape_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-pos-pago",
-          "scrape_status": "ok",
+          "scrape_status": "blocked",
           "gb": {
             "plan_gb": 50,
-            "total_displayed": 56,
-            "total_label": "base total (up to 132 GB w/ portab.)",
+            "total_displayed": 63,
+            "total_label": "total base (até 73 GB com portabilidade)",
             "bar": [
-              {
-                "type": "plan",
-                "pct": 70
-              },
-              {
-                "type": "bonus",
-                "pct": 11
-              },
-              {
-                "type": "port",
-                "pct": 19
-              }
+              {"type": "plan",  "pct": 79},
+              {"type": "bonus", "pct": 21}
             ],
             "legend": [
-              {
-                "type": "plan",
-                "amount": "50 GB",
-                "label": "plan"
-              },
-              {
-                "type": "bonus",
-                "amount": "+3 GB",
-                "label": "digital inv. · +3 GB auto debit"
-              },
-              {
-                "type": "port",
-                "amount": "+76 GB",
-                "label": "portability bonus*"
-              }
+              {"type": "plan",  "amount": "50 GB", "label": "franquia"},
+              {"type": "bonus", "amount": "+13 GB", "label": "bônus (3 débito auto + 10 especial 1 ano)"},
+              {"type": "port",  "amount": "+10 GB", "label": "portabilidade (1 ano)*"}
             ],
-            "note": "* Portability super-bonus: up to 76 GB for switchers. Digital invoice & auto debit bonuses are ongoing. Total base: 56 GB; with portability: up to 132 GB."
+            "note": "*+10 GB bônus na portabilidade válido por 1 ano. Vivo Travel Américas incluso."
           },
           "features": [
-            {
-              "label": "Unlimited domestic calls",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "Streaming included",
-              "value": "✓ Yes — choice of 1",
-              "status": "yes"
-            },
-            {
-              "label": "International roaming",
-              "value": "✓ Vivo Travel Americas",
-              "status": "yes"
-            },
-            {
-              "label": "No loyalty contract",
-              "value": "✓ Yes",
-              "status": "yes"
-            }
+            {"label": "Unlimited domestic calls", "value": "✓ Yes",                 "status": "yes"},
+            {"label": "Streaming included",       "value": "✓ Amazon Prime inclusa", "status": "yes"},
+            {"label": "International roaming",    "value": "✓ Vivo Travel Américas", "status": "yes"},
+            {"label": "No loyalty contract",      "value": "✓ Yes",                 "status": "yes"}
           ],
           "extras": [
-            {
-              "icon_class": "ei-stream",
-              "icon": "🎬",
-              "text": "<strong>Streaming choice:</strong> Netflix · Disney+ · Amazon Prime · Globoplay · Spotify · Premiere"
-            },
-            {
-              "icon_class": "ei-travel",
-              "icon": "✈️",
-              "text": "Vivo Travel Americas — internet + SMS + calls"
-            },
-            {
-              "icon_class": "ei-promo",
-              "icon": "🎬",
-              "text": "50% Cinemark discount (monthly)"
-            },
-            {
-              "icon_class": "ei-reward",
-              "icon": "💰",
-              "text": "Vale Bônus up to R$100/month"
-            }
+            {"icon_class": "ei-stream", "icon": "📦", "text": "Amazon Prime inclusa"},
+            {"icon_class": "ei-travel", "icon": "✈️", "text": "Vivo Travel Américas — internet + SMS + ligações"},
+            {"icon_class": "ei-stream", "icon": "🤖", "text": "1 ano Perplexity Pro"},
+            {"icon_class": "ei-promo",  "icon": "🎬", "text": "Meia-entrada na Cinemark todo mês"},
+            {"icon_class": "ei-reward", "icon": "💰", "text": "Vale Bônus até R$100/mês"}
           ],
           "source_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-pos-pago",
           "source_label": "vivo.com.br",
@@ -775,105 +379,44 @@
         },
         {
           "carrier": "tim",
-          "plan_name": "TIM Black A",
+          "plan_name": "TIM Black",
           "price": 119.99,
-          "price_display": "159,99",
+          "price_display": "119,99",
           "price_period": "per month",
           "price_pending": false,
           "currency": "R$",
-          "scrape_url": "https://www.tim.com.br/rj/para-voce/planos/pos-pago/tim-black",
+          "scrape_url": "https://www.tim.com.br/sp/para-voce/planos/pos-pago/tim-black",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": 70,
-            "total_displayed": 40,
-            "total_label": "total (up to 70 GB w/ super-bonus)",
+            "plan_gb": 40,
+            "total_displayed": 70,
+            "total_label": "total (40 plano + 10 promo + 10 bônus + 10 social)",
             "bar": [
-              {
-                "type": "plan",
-                "pct": 37
-              },
-              {
-                "type": "bonus",
-                "pct": 25
-              },
-              {
-                "type": "port",
-                "pct": 25
-              },
-              {
-                "type": "social",
-                "pct": 13
-              }
+              {"type": "plan",   "pct": 57},
+              {"type": "bonus",  "pct": 29},
+              {"type": "social", "pct": 14}
             ],
             "legend": [
-              {
-                "type": "plan",
-                "amount": "15 GB",
-                "label": "plan"
-              },
-              {
-                "type": "bonus",
-                "amount": "+10 GB",
-                "label": "promo · +10 GB special"
-              },
-              {
-                "type": "social",
-                "amount": "+5 GB",
-                "label": "social (WhatsApp, Instagram, FB, X)"
-              }
+              {"type": "plan",   "amount": "40 GB", "label": "do plano"},
+              {"type": "bonus",  "amount": "+20 GB", "label": "promo (10) + bônus especial (10)"},
+              {"type": "social", "amount": "+10 GB", "label": "redes sociais (X, Facebook, Instagram)"}
             ],
-            "note": "* Super-bonus available on select variants, up to 70 GB total. Social GB does not count against main quota."
+            "note": "R$119,99/mês com permanência de 12 meses. R$189,99/mês sem permanência mínima. Social GB não desconta da franquia. Roaming Internacional Américas: 40 GB."
           },
           "features": [
-            {
-              "label": "Unlimited domestic calls",
-              "value": "✓ Yes (via 041)",
-              "status": "yes"
-            },
-            {
-              "label": "Social apps free (WhatsApp, IG, FB, X)",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "Streaming included",
-              "value": "✓ Monthly choice",
-              "status": "yes"
-            },
-            {
-              "label": "International roaming",
-              "value": "✓ Americas 25 GB",
-              "status": "yes"
-            },
-            {
-              "label": "No loyalty contract",
-              "value": "✓ Yes",
-              "status": "yes"
-            }
+            {"label": "Unlimited domestic calls",          "value": "✓ Yes",                             "status": "yes"},
+            {"label": "WhatsApp free (no data deduction)", "value": "✓ Yes",                              "status": "yes"},
+            {"label": "Streaming included",                "value": "✓ Monthly choice",                  "status": "yes"},
+            {"label": "International roaming",             "value": "✓ Américas 40 GB",                  "status": "yes"},
+            {"label": "No loyalty contract",               "value": "⚠ 12-month loyalty for best price", "status": "partial"}
           ],
           "extras": [
-            {
-              "icon_class": "ei-stream",
-              "icon": "🎬",
-              "text": "<strong>Monthly streaming choice:</strong> Max · YouTube Premium · Disney+ · Amazon Prime"
-            },
-            {
-              "icon_class": "ei-stream",
-              "icon": "🎵",
-              "text": "Deezer Premium included"
-            },
-            {
-              "icon_class": "ei-promo",
-              "icon": "📱",
-              "text": "Exclusive smartphone discounts (TIM Tech Store)"
-            },
-            {
-              "icon_class": "ei-travel",
-              "icon": "✈️",
-              "text": "Americas roaming: up to 25 GB"
-            }
+            {"icon_class": "ei-stream", "icon": "🎬", "text": "<strong>Streaming mensal à escolha:</strong> Amazon Prime · Deezer Premium · Disney+ · Globoplay · HBO Max · Netflix · Paramount+ · YouTube Premium"},
+            {"icon_class": "ei-travel", "icon": "✈️", "text": "Roaming Internacional Américas: 40 GB"},
+            {"icon_class": "ei-reward", "icon": "⭐", "text": "TIM MAIS — sorteios, viagens e descontos"},
+            {"icon_class": "ei-stream", "icon": "📚", "text": "Aya Audiobooks Premium · Bancah Premium + Jornais · EXA Cloud 300 GB e outros"}
           ],
-          "source_url": "https://www.tim.com.br/rj/para-voce/planos/pos-pago/tim-black",
+          "source_url": "https://www.tim.com.br/sp/para-voce/planos/pos-pago/tim-black",
           "source_label": "tim.com.br",
           "verified": true,
           "verified_label": "Verified"
@@ -891,83 +434,31 @@
           "gb": {
             "plan_gb": 25,
             "total_displayed": 70,
-            "total_label": "total included",
+            "total_label": "total (25 uso livre + 25 social + 20 bônus)",
             "bar": [
-              {
-                "type": "plan",
-                "pct": 36
-              },
-              {
-                "type": "social",
-                "pct": 35
-              },
-              {
-                "type": "bonus",
-                "pct": 29
-              }
+              {"type": "plan",   "pct": 36},
+              {"type": "social", "pct": 36},
+              {"type": "bonus",  "pct": 28}
             ],
             "legend": [
-              {
-                "type": "plan",
-                "amount": "25 GB",
-                "label": "plan (general)"
-              },
-              {
-                "type": "social",
-                "amount": "+25 GB",
-                "label": "social & video streaming"
-              },
-              {
-                "type": "bonus",
-                "amount": "+20 GB",
-                "label": "bonus"
-              }
+              {"type": "plan",   "amount": "25 GB", "label": "uso livre"},
+              {"type": "social", "amount": "+25 GB", "label": "redes sociais e apps"},
+              {"type": "bonus",  "amount": "+20 GB", "label": "bônus uso livre"}
             ],
-            "note": "* Social/video GB includes WhatsApp, Instagram, Facebook, Twitter, Waze, and video streaming apps."
+            "note": "Redes sociais e apps: Instagram, YouTube, Netflix, TikTok e outros. Passaporte Américas incluso."
           },
           "features": [
-            {
-              "label": "Unlimited domestic calls",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "Social apps free (WhatsApp, IG, FB, X)",
-              "value": "✓ Yes",
-              "status": "yes"
-            },
-            {
-              "label": "Streaming included",
-              "value": "Netflix + CONMEBOL",
-              "status": "partial"
-            },
-            {
-              "label": "International roaming",
-              "value": "✓ Passaporte Américas",
-              "status": "yes"
-            },
-            {
-              "label": "No loyalty contract",
-              "value": "✓ Yes",
-              "status": "yes"
-            }
+            {"label": "Unlimited domestic calls",               "value": "✓ Yes",                  "status": "yes"},
+            {"label": "WhatsApp free (no data deduction)",      "value": "✓ Yes",                  "status": "yes"},
+            {"label": "Social apps free (IG, YouTube, TikTok)", "value": "✓ Yes",                  "status": "yes"},
+            {"label": "Streaming included",                     "value": "Partial — 30d Claro tv+","status": "partial"},
+            {"label": "International roaming",                  "value": "✓ Passaporte Américas",  "status": "yes"},
+            {"label": "No loyalty contract",                    "value": "✓ Yes",                  "status": "yes"}
           ],
           "extras": [
-            {
-              "icon_class": "ei-reward",
-              "icon": "👥",
-              "text": "1 dependent line included"
-            },
-            {
-              "icon_class": "ei-stream",
-              "icon": "📚",
-              "text": "Skeelo Premium · Claro Banca Premium · TrueCaller"
-            },
-            {
-              "icon_class": "ei-travel",
-              "icon": "✈️",
-              "text": "Passaporte Americas included"
-            }
+            {"icon_class": "ei-stream", "icon": "📺", "text": "30 dias de Claro tv+ App incluso"},
+            {"icon_class": "ei-travel", "icon": "✈️", "text": "Passaporte Américas incluso"},
+            {"icon_class": "ei-reward", "icon": "📞", "text": "WhatsApp e ligações ilimitados"}
           ],
           "source_url": "https://www.claro.com.br/celular/pos",
           "source_label": "claro.com.br",
