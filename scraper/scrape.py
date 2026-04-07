@@ -216,32 +216,32 @@ def find_gb_near_text(text: str, keyword: str, window: int = 300) -> Optional[in
 
 
 # ── Carrier-specific parsers ──────────────────────────────────────────────────
-# Each parser returns a dict with keys: price (float|None), plan_gb (int|None)
+# Each parser returns a dict with keys:
+#   price (float|None), plan_gb (int|None), confidence ("high"|"low")
+#
+# confidence="high"  → primary keyword matched; value is trustworthy.
+#                      detect_changes will use this value and may update plans.json.
+# confidence="low"   → fell back to range scan or secondary keyword; value is a guess.
+#                      detect_changes will skip the update and flag for manual review.
+#
 # Returns None if the page text is empty/invalid.
 
 def parse_vivo_prepaid(text: str) -> Optional[dict]:
-    """Vivo pre-paid: look for Vivo Turbo / cheapest 30-day plan."""
+    """Vivo pre-paid: site consistently 403. No reliable keyword. Always low."""
     if not text or len(text) < 100:
         return None
-    result: dict[str, Any] = {}
-
-    # Try to find the Turbo plan specifically
     price = find_price_near_text(text, "Turbo", window=400)
     if price is None:
-        # Fall back: find the cheapest plan on the page (≥ R$20, ≤ R$60)
         prices = [p for p in extract_all_prices(text) if 20 <= p <= 60]
         price = prices[0] if prices else None
-
     gb = find_gb_near_text(text, "Turbo", window=400)
     if gb is None:
         gb = find_gb_near_text(text, "30 dias", window=500)
-
-    result["price"]   = price
-    result["plan_gb"] = gb
-    return result
+    return {"price": price, "plan_gb": gb, "confidence": "low"}
 
 
 def parse_vivo_controle(text: str) -> Optional[dict]:
+    """Vivo controle: no reliable primary keyword yet. Always low."""
     if not text or len(text) < 100:
         return None
     price = find_price_near_text(text, "Controle", window=500)
@@ -252,10 +252,11 @@ def parse_vivo_controle(text: str) -> Optional[dict]:
     if gb is None:
         gbs = [g for g in extract_all_gb(text) if 15 <= g <= 50]
         gb = gbs[0] if gbs else None
-    return {"price": price, "plan_gb": gb}
+    return {"price": price, "plan_gb": gb, "confidence": "low"}
 
 
 def parse_vivo_postpaid(text: str) -> Optional[dict]:
+    """Vivo post-paid: no reliable primary keyword yet. Always low."""
     if not text or len(text) < 100:
         return None
     price = find_price_near_text(text, "Pós", window=500)
@@ -264,62 +265,92 @@ def parse_vivo_postpaid(text: str) -> Optional[dict]:
         price = prices[0] if prices else None
     gbs = [g for g in extract_all_gb(text) if 30 <= g <= 200]
     gb = gbs[0] if gbs else None
-    return {"price": price, "plan_gb": gb}
+    return {"price": price, "plan_gb": gb, "confidence": "low"}
 
 
 def parse_tim_prepaid(text: str) -> Optional[dict]:
     if not text or len(text) < 100:
         return None
-    price = find_price_near_text(text, "XIP", window=400)
+    confidence = "high"
+    # "R$ 30 por 30 dias" — price sits immediately before "por 30 dias"
+    price = find_price_near_text(text, "por 30 dias", window=60)
     if price is None:
-        price = find_price_near_text(text, "Pré", window=400)
-    if price is None:
-        prices = [p for p in extract_all_prices(text) if 20 <= p <= 60]
-        price = prices[0] if prices else None
-    gb = find_gb_near_text(text, "XIP", window=400)
+        confidence = "low"
+        price = find_price_near_text(text, "XIP", window=400)
+        if price is None:
+            prices = [p for p in extract_all_prices(text) if 20 <= p <= 60]
+            price = prices[0] if prices else None
+    # "12GB da oferta + 4GB exclusivo para redes sociais"
+    gb = find_gb_near_text(text, "da oferta", window=60)
     if gb is None:
-        gbs = [g for g in extract_all_gb(text) if 6 <= g <= 30]
-        gb = gbs[0] if gbs else None
-    return {"price": price, "plan_gb": gb}
+        confidence = "low"
+        gb = find_gb_near_text(text, "XIP", window=400)
+        if gb is None:
+            gbs = [g for g in extract_all_gb(text) if 6 <= g <= 20]
+            gb = gbs[0] if gbs else None
+    return {"price": price, "plan_gb": gb, "confidence": confidence}
 
 
 def parse_tim_controle(text: str) -> Optional[dict]:
     if not text or len(text) < 100:
         return None
-    price = find_price_near_text(text, "Controle", window=500)
+    confidence = "high"
+    # Card (show state): "R$ 49,99/mês" — price immediately before "/mês"
+    price = find_price_near_text(text, "/mês", window=60)
     if price is None:
+        confidence = "low"
         prices = [p for p in extract_all_prices(text) if 40 <= p <= 120]
         price = prices[0] if prices else None
-    gbs = [g for g in extract_all_gb(text) if 10 <= g <= 60]
+    # Card (show state): <h2>45GB</h2> — first plausible GB on page
+    gbs = [g for g in extract_all_gb(text) if 20 <= g <= 80]
     gb = gbs[0] if gbs else None
-    return {"price": price, "plan_gb": gb}
+    if gb is None:
+        confidence = "low"
+    return {"price": price, "plan_gb": gb, "confidence": confidence}
 
 
 def parse_tim_postpaid(text: str) -> Optional[dict]:
     if not text or len(text) < 100:
         return None
-    price = find_price_near_text(text, "Black", window=500)
+    confidence = "high"
+    # "R$ 119,99/mês na fatura" — price immediately before "na fatura"
+    price = find_price_near_text(text, "na fatura", window=80)
     if price is None:
+        confidence = "low"
         prices = [p for p in extract_all_prices(text) if 100 <= p <= 300]
         price = prices[0] if prices else None
-    gbs = [g for g in extract_all_gb(text) if 10 <= g <= 100]
-    gb = gbs[0] if gbs else None
-    return {"price": price, "plan_gb": gb}
+    # <h2>Até 70GB</h2> — GB immediately after "Até"
+    gb = find_gb_near_text(text, "Até", window=60)
+    if gb is None:
+        confidence = "low"
+        gbs = [g for g in extract_all_gb(text) if 40 <= g <= 150]
+        gb = gbs[0] if gbs else None
+    return {"price": price, "plan_gb": gb, "confidence": confidence}
 
 
 def parse_claro_prepaid(text: str) -> Optional[dict]:
     if not text or len(text) < 100:
         return None
-    price = find_price_near_text(text, "Prezão", window=400)
+    confidence = "high"
+    # "R$30/ 30dias" — price immediately before "30dias"
+    price = find_price_near_text(text, "30dias", window=60)
     if price is None:
-        prices = [p for p in extract_all_prices(text) if 20 <= p <= 60]
-        price = prices[0] if prices else None
+        price = find_price_near_text(text, "/ 30dias", window=60)
+    if price is None:
+        confidence = "low"
+        price = find_price_near_text(text, "Prezão", window=400)
+        if price is None:
+            prices = [p for p in extract_all_prices(text) if 20 <= p <= 60]
+            price = prices[0] if prices else None
     gbs = [g for g in extract_all_gb(text) if 6 <= g <= 30]
     gb = gbs[0] if gbs else None
-    return {"price": price, "plan_gb": gb}
+    if gb is None:
+        confidence = "low"
+    return {"price": price, "plan_gb": gb, "confidence": confidence}
 
 
 def parse_claro_controle(text: str) -> Optional[dict]:
+    """Claro controle: no reliable primary keyword yet. Always low."""
     if not text or len(text) < 100:
         return None
     price = find_price_near_text(text, "Controle", window=500)
@@ -328,10 +359,11 @@ def parse_claro_controle(text: str) -> Optional[dict]:
         price = prices[0] if prices else None
     gbs = [g for g in extract_all_gb(text) if 10 <= g <= 60]
     gb = gbs[0] if gbs else None
-    return {"price": price, "plan_gb": gb}
+    return {"price": price, "plan_gb": gb, "confidence": "low"}
 
 
 def parse_claro_postpaid(text: str) -> Optional[dict]:
+    """Claro post-paid: no reliable primary keyword yet. Always low."""
     if not text or len(text) < 100:
         return None
     price = find_price_near_text(text, "Pós", window=400)
@@ -340,7 +372,7 @@ def parse_claro_postpaid(text: str) -> Optional[dict]:
         price = prices[0] if prices else None
     gbs = [g for g in extract_all_gb(text) if 20 <= g <= 200]
     gb = gbs[0] if gbs else None
-    return {"price": price, "plan_gb": gb}
+    return {"price": price, "plan_gb": gb, "confidence": "low"}
 
 
 # ── Scraping job definitions ──────────────────────────────────────────────────
@@ -579,16 +611,17 @@ def apply_changes(data: dict, job: dict, scraped: dict, changes: list[dict]) -> 
     data["meta"]["collected_date_display"] = datetime.strptime(today, "%Y-%m-%d").strftime("%b %-d, %Y") if sys.platform != "win32" else datetime.strptime(today, "%Y-%m-%d").strftime("%b %d, %Y").replace(" 0", " ")
 
 
-# ── XLSX Changelog ────────────────────────────────────────────────────────────
-
-XLSX_HEADERS = [
-    "Date", "Time (BRT)", "Carrier", "Segment",
-    "Plan Name", "Field Changed", "Old Value", "New Value",
-]
+# ── XLSX ─────────────────────────────────────────────────────────────────────
+# 4-tab workbook:
+#   "Histórico de Mudanças" — one row per confirmed change
+#   "Pré-Pago"              — one snapshot row per carrier per run
+#   "Controle"              — idem
+#   "Pós-Pago"              — idem
 
 HEADER_FILL  = PatternFill("solid", fgColor="1A3A6B")
 HEADER_FONT  = Font(bold=True, color="FFFFFF", size=11)
-CHANGE_FILL  = PatternFill("solid", fgColor="FFF3CD")   # amber for changes
+CHANGE_FILL  = PatternFill("solid", fgColor="FFF3CD")   # amber for confirmed changes
+WARN_FILL    = PatternFill("solid", fgColor="FFE0CC")   # orange for manual-needed
 ALT_FILL     = PatternFill("solid", fgColor="F8F9FA")
 BORDER_SIDE  = Side(style="thin", color="DEE2E6")
 CELL_BORDER  = Border(
@@ -596,86 +629,160 @@ CELL_BORDER  = Border(
     top=BORDER_SIDE, bottom=BORDER_SIDE,
 )
 
-COL_WIDTHS = [12, 10, 10, 14, 28, 18, 14, 14]
+SEGMENT_TABS = {
+    "prepaid":  "Pré-Pago",
+    "controle": "Controle",
+    "postpaid": "Pós-Pago",
+}
+
+CHANGES_HEADERS = [
+    "Data", "Hora (BRT)", "Empresa", "Segmento", "Plano",
+    "Campo Alterado", "Valor Anterior", "Novo Valor", "Descrição",
+]
+CHANGES_WIDTHS = [12, 10, 10, 14, 28, 18, 16, 16, 40]
+
+SNAPSHOT_HEADERS = [
+    "Data", "Empresa", "Preço (R$)", "GB Base", "Bônus", "Status Coleta",
+]
+SNAPSHOT_WIDTHS = [12, 10, 12, 10, 30, 22]
 
 
-def _ensure_workbook() -> openpyxl.Workbook:
-    """Load existing workbook or create a new one with headers."""
-    if CHANGELOG_XLSX.exists():
-        return openpyxl.load_workbook(CHANGELOG_XLSX)
-
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "Changes Log"
-
-    # Write headers
-    for col_idx, header in enumerate(XLSX_HEADERS, start=1):
+def _write_headers(ws, headers: list[str], widths: list[int]) -> None:
+    for col_idx, header in enumerate(headers, start=1):
         cell = ws.cell(row=1, column=col_idx, value=header)
-        cell.fill   = HEADER_FILL
-        cell.font   = HEADER_FONT
-        cell.border = CELL_BORDER
+        cell.fill      = HEADER_FILL
+        cell.font      = HEADER_FONT
+        cell.border    = CELL_BORDER
         cell.alignment = Alignment(horizontal="center", vertical="center")
-
-    # Set column widths
-    for col_idx, width in enumerate(COL_WIDTHS, start=1):
+    for col_idx, width in enumerate(widths, start=1):
         ws.column_dimensions[get_column_letter(col_idx)].width = width
-
     ws.row_dimensions[1].height = 22
     ws.freeze_panes = "A2"
+
+
+def _load_or_create_workbook() -> openpyxl.Workbook:
+    """Load existing 4-tab workbook or create it fresh."""
+    if CHANGELOG_XLSX.exists():
+        wb = openpyxl.load_workbook(CHANGELOG_XLSX)
+    else:
+        wb = openpyxl.Workbook()
+        wb.active.title = "Histórico de Mudanças"
+
+    # Ensure all required tabs exist
+    if "Histórico de Mudanças" not in wb.sheetnames:
+        wb.create_sheet("Histórico de Mudanças", 0)
+    for tab in SEGMENT_TABS.values():
+        if tab not in wb.sheetnames:
+            wb.create_sheet(tab)
+
+    # Write headers on tabs that are brand-new (only row 1 exists or sheet is empty)
+    ws_changes = wb["Histórico de Mudanças"]
+    if ws_changes.max_row <= 1 and ws_changes.cell(1, 1).value is None:
+        _write_headers(ws_changes, CHANGES_HEADERS, CHANGES_WIDTHS)
+
+    for tab in SEGMENT_TABS.values():
+        ws = wb[tab]
+        if ws.max_row <= 1 and ws.cell(1, 1).value is None:
+            _write_headers(ws, SNAPSHOT_HEADERS, SNAPSHOT_WIDTHS)
 
     return wb
 
 
-def append_to_changelog(changes: list[dict], dry_run: bool = False) -> None:
-    """Append change rows to the XLSX changelog."""
-    if not changes:
-        return
+def _get_bonus_summary(plan: dict) -> str:
+    """Extract bonus GB description from a plan's legend (non-plan types)."""
+    legend = plan.get("gb", {}).get("legend", [])
+    parts = [
+        item.get("amount", "")
+        for item in legend
+        if item.get("type") in ("bonus", "social", "port") and item.get("amount")
+    ]
+    return " / ".join(parts) if parts else "—"
 
-    now = now_brt()
+
+def update_xlsx(
+    snapshots: list[dict],
+    changes: list[dict],
+    dry_run: bool = False,
+) -> None:
+    """
+    Update the 4-tab workbook:
+    - Append confirmed changes to "Histórico de Mudanças"
+    - Append one snapshot row per carrier to each segment tab
+    """
+    now      = now_brt()
     date_str = now.strftime("%Y-%m-%d")
     time_str = now.strftime("%H:%M")
 
     if dry_run:
-        log.info(f"[DRY RUN] Would write {len(changes)} row(s) to changelog.xlsx")
-        for ch in changes:
-            log.info(
-                f"  {date_str} | {CARRIER_LABELS[ch['carrier']]} | "
-                f"{SEGMENT_LABELS[ch['segment']]} | {ch['field_label']} | "
-                f"{ch['old_value']} → {ch['new_value']}"
-            )
+        log.info(f"[DRY RUN] Would write {len(snapshots)} snapshot(s) and "
+                 f"{len(changes)} change(s) to changelog.xlsx")
         return
 
     CHANGELOG_XLSX.parent.mkdir(parents=True, exist_ok=True)
-    wb = _ensure_workbook()
-    ws = wb["Changes Log"]
-    next_row = ws.max_row + 1
+    wb = _load_or_create_workbook()
 
-    for i, ch in enumerate(changes):
-        row_idx  = next_row + i
-        is_even  = row_idx % 2 == 0
-        row_fill = ALT_FILL if is_even else PatternFill()
-
+    # ── Tab 1: Histórico de Mudanças ─────────────────────────────────────────
+    ws_ch = wb["Histórico de Mudanças"]
+    for ch in changes:
+        row_idx = ws_ch.max_row + 1
+        old_str = _format_value(ch["field"], ch["old_value"])
+        new_str = _format_value(ch["field"], ch["new_value"])
+        field_labels = {"price": "Preço", "plan_gb": "GB Base"}
+        desc = f"{old_str} → {new_str}"
         values = [
-            date_str,
-            time_str,
+            date_str, time_str,
             CARRIER_LABELS.get(ch["carrier"], ch["carrier"]),
             SEGMENT_LABELS.get(ch["segment"], ch["segment"]),
             ch.get("plan_name", ""),
-            ch.get("field_label", ch.get("field", "")),
-            str(ch["old_value"]) if ch["old_value"] is not None else "—",
-            str(ch["new_value"]),
+            field_labels.get(ch["field"], ch["field"]),
+            old_str, new_str, desc,
         ]
+        for col_idx, val in enumerate(values, start=1):
+            cell = ws_ch.cell(row=row_idx, column=col_idx, value=val)
+            cell.border    = CELL_BORDER
+            cell.alignment = Alignment(vertical="center")
+            cell.fill      = CHANGE_FILL
+            if col_idx in (7, 8):
+                cell.font = Font(bold=True)
 
+    # ── Tabs 2-4: per-segment snapshots ──────────────────────────────────────
+    for snap in snapshots:
+        tab = SEGMENT_TABS.get(snap["segment"])
+        if not tab or tab not in wb.sheetnames:
+            continue
+        ws = wb[tab]
+        row_idx = ws.max_row + 1
+        status  = snap["collection_status"]
+        fill    = CHANGE_FILL if status == "confirmed_change" else (
+                  WARN_FILL  if status == "manual_needed"    else
+                  PatternFill())
+
+        price_val = snap.get("price")
+        price_str = f"{float(price_val):.2f}".replace(".", ",") if price_val is not None else "—"
+        gb_str    = str(snap["plan_gb"]) if snap.get("plan_gb") is not None else "—"
+
+        status_labels = {
+            "confirmed":        "✅ Coletado",
+            "confirmed_change": "✅ Atualizado",
+            "manual_needed":    "⚠️ Verificar manualmente",
+            "error":            "❌ Falha ao carregar",
+        }
+        values = [
+            date_str,
+            CARRIER_LABELS.get(snap["carrier"], snap["carrier"]),
+            price_str,
+            gb_str,
+            snap.get("bonus", "—"),
+            status_labels.get(status, status),
+        ]
         for col_idx, val in enumerate(values, start=1):
             cell = ws.cell(row=row_idx, column=col_idx, value=val)
             cell.border    = CELL_BORDER
             cell.alignment = Alignment(vertical="center")
-            cell.fill      = CHANGE_FILL   # always amber for actual changes
-            if col_idx in (7, 8):          # old/new value columns bold
-                cell.font = Font(bold=True)
+            cell.fill      = fill
 
     wb.save(CHANGELOG_XLSX)
-    log.info(f"Changelog updated: {CHANGELOG_XLSX} ({len(changes)} new row(s))")
+    log.info(f"Workbook saved: {CHANGELOG_XLSX}")
 
 
 # ── GitHub Issues notifier ────────────────────────────────────────────────────
@@ -702,67 +809,117 @@ def _pct_change(old: Any, new: Any) -> str:
         return ""
 
 
-def build_issue(changes: list[dict], scrape_errors: list[dict]) -> tuple[str, str]:
+def build_issue(
+    snapshots: list[dict],
+    changes: list[dict],
+    scrape_errors: list[dict],
+) -> tuple[str, str]:
     """
     Build GitHub Issue title and Markdown body.
     Returns (title, body_markdown).
+
+    Shows one table per segment with all carriers, then a "what's missing" section.
     """
     today_str = now_brt().strftime("%Y-%m-%d")
     time_str  = now_brt().strftime("%H:%M BRT")
     n_changes = len(changes)
-    n_errors  = len(scrape_errors)
+    missing   = [s for s in snapshots if s["collection_status"] in ("manual_needed", "error")]
 
     if n_changes > 0:
-        title = f"⚠️ {n_changes} plan change(s) detected — {today_str}"
+        title = f"⚠️ {n_changes} mudança(s) confirmada(s) — {today_str}"
+    elif missing:
+        title = f"🔍 {len(missing)} plano(s) precisam de verificação — {today_str}"
     else:
-        title = f"✅ Daily check — no changes — {today_str}"
+        title = f"✅ Verificação concluída — sem mudanças — {today_str}"
 
     lines = []
-    lines.append(f"**BTG TMT Telecom Pricing Monitor** · {today_str} at {time_str}\n")
+    lines.append(f"**BTG TMT — Telecom Pricing Monitor** · {today_str} às {time_str}\n")
 
-    # ── Changes table ─────────────────────────────────────────────────────────
+    # ── Per-segment status tables ──────────────────────────────────────────────
+    seg_order = [("prepaid", "Pré-Pago (30d)"), ("controle", "Controle"), ("postpaid", "Pós-Pago")]
+    snap_index = {(s["segment"], s["carrier"]): s for s in snapshots}
+
+    for seg_key, seg_label in seg_order:
+        lines.append(f"## 📊 {seg_label}\n")
+        lines.append("| Empresa | Preço | GB Base | Bônus | Status |")
+        lines.append("|---------|-------|---------|-------|--------|")
+        for carrier in ("vivo", "tim", "claro"):
+            snap = snap_index.get((seg_key, carrier))
+            if not snap:
+                lines.append(f"| {CARRIER_LABELS.get(carrier, carrier)} | — | — | — | ❓ Sem dados |")
+                continue
+            price_str = (
+                f"R$ {float(snap['price']):.2f}".replace(".", ",")
+                if snap.get("price") is not None else "—"
+            )
+            gb_str    = f"{snap['plan_gb']} GB" if snap.get("plan_gb") is not None else "—"
+            bonus_str = snap.get("bonus", "—")
+            status    = snap["collection_status"]
+            status_icon = {
+                "confirmed":        "✅ Coletado",
+                "confirmed_change": "✅ Atualizado automaticamente",
+                "manual_needed":    "⚠️ Verificar — envie print",
+                "error":            "❌ Falha ao carregar",
+            }.get(status, status)
+            lines.append(
+                f"| **{CARRIER_LABELS.get(carrier, carrier)}** "
+                f"| {price_str} | {gb_str} | {bonus_str} | {status_icon} |"
+            )
+        lines.append("")
+
+    # ── Confirmed changes detail ───────────────────────────────────────────────
     if changes:
-        lines.append(f"## ⚠️ {n_changes} Change(s) Detected\n")
-        lines.append("> Please verify on the carrier websites before updating the dashboard.\n")
-        lines.append("| Carrier | Segment | Plan | Field | Old | New | Δ |")
-        lines.append("|---------|---------|------|-------|-----|-----|---|")
+        lines.append(f"## ⚠️ {n_changes} Mudança(s) Confirmada(s)\n")
+        lines.append("> Detectadas com alta confiança e aplicadas ao plans.json.\n")
+        lines.append("| Empresa | Segmento | Plano | Campo | Antes | Depois | Δ |")
+        lines.append("|---------|----------|-------|-------|-------|--------|---|")
         for ch in changes:
             old_fmt = _format_value(ch["field"], ch["old_value"])
             new_fmt = _format_value(ch["field"], ch["new_value"])
             pct     = _pct_change(ch["old_value"], ch["new_value"])
+            field_labels = {"price": "Preço", "plan_gb": "GB Base"}
             lines.append(
                 f"| **{CARRIER_LABELS.get(ch['carrier'], ch['carrier'])}** "
                 f"| {SEGMENT_LABELS.get(ch['segment'], ch['segment'])} "
                 f"| {ch.get('plan_name', '')} "
-                f"| {ch.get('field_label', '')} "
-                f"| ~~{old_fmt}~~ "
-                f"| **{new_fmt}** "
-                f"| {pct} |"
+                f"| {field_labels.get(ch['field'], ch['field'])} "
+                f"| ~~{old_fmt}~~ | **{new_fmt}** | {pct} |"
             )
         lines.append("")
-    else:
-        lines.append("## ✅ No Changes Found\n")
-        lines.append("All 9 tracked plans were checked. Prices and GB values are unchanged.\n")
 
-    # ── Scraping errors ───────────────────────────────────────────────────────
+    # ── What's missing ────────────────────────────────────────────────────────
+    if missing:
+        lines.append("## 🔍 Envie um print para estes planos\n")
+        lines.append(
+            "> Os valores abaixo **não foram atualizados**. "
+            "Envie um screenshot do site da operadora no chat.\n"
+        )
+        for s in missing:
+            reason = "site bloqueado" if s["collection_status"] == "error" else "marcador não encontrado na página"
+            stored_price = (
+                f"R$ {float(s['price']):.2f}".replace(".", ",")
+                if s.get("price") is not None else "sem preço"
+            )
+            stored_gb = f"{s['plan_gb']} GB" if s.get("plan_gb") is not None else "sem GB"
+            lines.append(
+                f"- **{CARRIER_LABELS.get(s['carrier'], s['carrier'])} "
+                f"{SEGMENT_LABELS.get(s['segment'], s['segment'])}** "
+                f"— {reason}. Valor atual guardado: {stored_price} · {stored_gb}"
+            )
+        lines.append("")
+
+    # ── Page errors ───────────────────────────────────────────────────────────
     if scrape_errors:
-        lines.append(f"## ⚠️ Scraping Issues ({n_errors})\n")
-        lines.append("The following plans could not be verified. Stored values were kept.\n")
-        lines.append("| Carrier | Segment | Reason |")
-        lines.append("|---------|---------|--------|")
+        lines.append(f"## ❌ Páginas que não carregaram ({len(scrape_errors)})\n")
         for e in scrape_errors:
             lines.append(
-                f"| {CARRIER_LABELS.get(e['carrier'], e['carrier'])} "
-                f"| {SEGMENT_LABELS.get(e['segment'], e['segment'])} "
-                f"| {e.get('reason', 'Scraping failed')} |"
+                f"- {CARRIER_LABELS.get(e['carrier'], e['carrier'])} "
+                f"{SEGMENT_LABELS.get(e['segment'], e['segment'])}: {e.get('reason', '')}"
             )
         lines.append("")
 
     lines.append("---")
-    lines.append(
-        "_Automated daily check · Segments: Pre-Paid (30d) · Controle · Post-Paid · "
-        "São Paulo, DDD 11_"
-    )
+    lines.append("_Monitor automático BTG TMT · Pré-Pago · Controle · Pós-Pago · São Paulo DDD 11_")
 
     return title, "\n".join(lines)
 
@@ -874,66 +1031,96 @@ def main() -> None:
 
     all_changes:   list[dict] = []
     scrape_errors: list[dict] = []
+    snapshots:     list[dict] = []   # one entry per plan, every run
 
     # Run all scrape jobs
     for job in SCRAPE_JOBS:
         seg     = job["segment"]
         carrier = job["carrier"]
         label   = f"{CARRIER_LABELS.get(carrier, carrier)} {SEGMENT_LABELS.get(seg, seg)}"
+        plan    = find_plan(data, seg, carrier)
 
         log.info(f"--- Checking {label} ---")
+
+        # Base snapshot from stored plans.json (always recorded, even on failure)
+        snap: dict = {
+            "segment":           seg,
+            "carrier":           carrier,
+            "plan_name":         plan.get("plan_name", "") if plan else "",
+            "price":             plan.get("price") if plan else None,
+            "plan_gb":           (plan.get("gb") or {}).get("plan_gb") if plan else None,
+            "bonus":             _get_bonus_summary(plan) if plan else "—",
+            "collection_status": "error",  # updated below if scraping succeeds
+        }
+
         page_text = fetch_page_text(job["url"], wait_seconds=job.get("wait", 8))
 
         if page_text is None:
-            log.warning(f"No page content for {label} — skipping")
+            log.warning(f"No page content for {label} — site blocked or timeout")
             scrape_errors.append({
                 "carrier": carrier,
                 "segment": seg,
-                "reason":  "Page fetch failed (blocked or timeout)",
+                "reason":  "Site bloqueado ou timeout",
             })
+            snapshots.append(snap)
             continue
 
         scraped = job["parser"](page_text)
         if scraped is None:
-            log.warning(f"Parser returned None for {label} — skipping")
+            log.warning(f"Parser returned None for {label}")
             scrape_errors.append({
                 "carrier": carrier,
                 "segment": seg,
-                "reason":  "Page loaded but content could not be parsed",
+                "reason":  "Página carregou mas conteúdo não foi parseado",
             })
+            snapshots.append(snap)
             continue
 
+        confidence = scraped.get("confidence", "low")
         log.info(
             f"{label}: scraped price={scraped.get('price')} "
-            f"plan_gb={scraped.get('plan_gb')}"
+            f"plan_gb={scraped.get('plan_gb')} confidence={confidence}"
         )
 
-        changes = detect_changes(data, job, scraped)
-        all_changes.extend(changes)
+        if confidence == "low":
+            snap["collection_status"] = "manual_needed"
+            snapshots.append(snap)
+            log.warning(f"Low confidence for {label} — stored values kept, flagged for manual check")
+            continue
 
-        if not args.dry_run and changes:
-            apply_changes(data, job, scraped, changes)
+        # High confidence — check for changes
+        job_changes = detect_changes(data, job, scraped)
+        all_changes.extend(job_changes)
 
-    # Write updated plans.json if there were changes
+        if not args.dry_run and job_changes:
+            apply_changes(data, job, scraped, job_changes)
+            # Update snapshot price/gb to reflect what was just applied
+            snap["price"]   = scraped.get("price", snap["price"])
+            snap["plan_gb"] = scraped.get("plan_gb", snap["plan_gb"])
+            snap["collection_status"] = "confirmed_change"
+        else:
+            snap["collection_status"] = "confirmed"
+
+        snapshots.append(snap)
+
+    # Write updated plans.json if there were confirmed changes
     if all_changes and not args.dry_run:
         with open(PLANS_JSON, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         log.info(f"plans.json saved with {len(all_changes)} change(s)")
 
-    # Write XLSX changelog
-    if all_changes:
-        append_to_changelog(all_changes, dry_run=args.dry_run)
+    # Update XLSX (snapshots every run + confirmed changes)
+    update_xlsx(snapshots, all_changes, dry_run=args.dry_run)
 
-    # Create GitHub Issue (GitHub emails you automatically)
-    # Always create — daily "all clear" issues are also useful as a confirmation
-    # that the monitor is running correctly.
-    title, body = build_issue(all_changes, scrape_errors)
+    # Create GitHub Issue — always, so you get an email every run
+    title, body = build_issue(snapshots, all_changes, scrape_errors)
     create_github_issue(title, body, dry_run=args.dry_run)
 
     # Summary
     log.info(
-        f"=== Done: {len(all_changes)} change(s) detected, "
-        f"{len(scrape_errors)} scrape error(s) ==="
+        f"=== Done: {len(all_changes)} confirmed change(s), "
+        f"{len([s for s in snapshots if s['collection_status'] == 'manual_needed'])} manual check(s) needed, "
+        f"{len(scrape_errors)} page error(s) ==="
     )
 
 

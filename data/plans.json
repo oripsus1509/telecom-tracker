@@ -108,36 +108,36 @@
           "plan_gb": 12
         },
         "claro": {
-          "price": 1.0,
-          "plan_gb": 8
+          "price": 30.0,
+          "plan_gb": 12
         }
       },
       "controle": {
         "vivo": {
           "price": 59.0,
-          "plan_gb": 15
+          "plan_gb": 21
         },
         "tim": {
-          "price": 43.9,
-          "plan_gb": 20
+          "price": null,
+          "plan_gb": 15
         },
         "claro": {
-          "price": 44.0,
-          "plan_gb": 10
+          "price": 59.9,
+          "plan_gb": null
         }
       },
       "postpaid": {
         "vivo": {
-          "price": 133.0,
+          "price": 140.0,
           "plan_gb": 50
         },
         "tim": {
-          "price": 119.99,
-          "plan_gb": 10
+          "price": 159.99,
+          "plan_gb": 15
         },
         "claro": {
-          "price": 119.0,
-          "plan_gb": 20
+          "price": 119.9,
+          "plan_gb": 25
         }
       }
     }
@@ -342,7 +342,7 @@
           "scrape_url": "https://www.claro.com.br/celular/planos-pre/prezao",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": 8,
+            "plan_gb": 12,
             "total_displayed": 12,
             "total_label": "plan data",
             "bar": [
@@ -421,7 +421,7 @@
           "scrape_url": "https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/planos-controle",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": 15,
+            "plan_gb": 21,
             "total_displayed": 32,
             "total_label": "potential total",
             "bar": [
@@ -680,7 +680,7 @@
         {
           "carrier": "vivo",
           "plan_name": "Vivo Pós — Entry",
-          "price": 133.0,
+          "price": 140.0,
           "price_display": "140",
           "price_period": "per month",
           "price_pending": false,
@@ -776,7 +776,7 @@
         {
           "carrier": "tim",
           "plan_name": "TIM Black A",
-          "price": 119.99,
+          "price": 159.99,
           "price_display": "159,99",
           "price_period": "per month",
           "price_pending": false,
@@ -784,7 +784,7 @@
           "scrape_url": "https://www.tim.com.br/rj/para-voce/planos/pos-pago/tim-black",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": 10,
+            "plan_gb": 15,
             "total_displayed": 40,
             "total_label": "total (up to 70 GB w/ super-bonus)",
             "bar": [
@@ -881,7 +881,7 @@
         {
           "carrier": "claro",
           "plan_name": "Claro Pós 70 GB",
-          "price": 119.0,
+          "price": 119.9,
           "price_display": "119,90",
           "price_period": "per month",
           "price_pending": false,
@@ -889,7 +889,7 @@
           "scrape_url": "https://www.claro.com.br/celular/pos",
           "scrape_status": "ok",
           "gb": {
-            "plan_gb": 20,
+            "plan_gb": 25,
             "total_displayed": 70,
             "total_label": "total included",
             "bar": [
